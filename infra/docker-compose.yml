@@ -1,15 +1,17 @@
 version: '3.8'
 
 volumes:
-  data_volume:
+  data_value:
   static_value:
   media_value:
+  redoc:
 
 services:
   db:
-    image: postgres:13.0-alpine
+    image: postgres:14.6-alpine
+    restart: always
     volumes:
-      - data_volume:/var/lib/postgresql/data/
+      - data_value:/var/lib/postgresql/data/
     env_file:
       - ./.env
 
@@ -17,6 +19,7 @@ services:
     image: koloyojik/foodgram_backend:latest
     restart: always
     volumes:
+      - redoc:/app/api/docs/
       - static_value:/app/static/
       - media_value:/app/media/
     depends_on:
@@ -32,16 +35,15 @@ services:
       - backend
 
   nginx:
-    image: nginx:1.21.3-alpine
+    image: nginx:1.19.3
+    restart: always
     ports:
       - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
-      - /docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
-      - /docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
       - static_value:/var/html/static/
       - media_value:/var/html/media/
-    restart: always
+      - redoc:/usr/share/nginx/html/api/docs/
     depends_on:
       - frontend
