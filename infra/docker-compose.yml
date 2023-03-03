@@ -17,7 +17,7 @@ services:
     image: koloyojik/foodgram_backend:latest
     restart: always
     volumes:
-      - static_value:/app/static_backend/
+      - static_value:/app/static/
       - media_value:/app/media/
     depends_on:
       - db
