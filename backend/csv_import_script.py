@@ -10,5 +10,6 @@ os.chdir(path)
 # Скрипт для испорта из файла CSV в базу данных Ingredient
 with open('ingredients.csv', mode="r", encoding="utf-8") as file:
     reader = csv.DictReader(file)
-    for row in reader:
-        Ingredient.objects.get_or_create(**row)
+    Ingredient.objects.bulk_create(
+        Ingredient(**row) for row in reader
+    )
