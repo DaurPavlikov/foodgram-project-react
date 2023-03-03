@@ -11,8 +11,4 @@ os.chdir(path)
 with open('ingredients.csv', mode="r", encoding="utf-8") as file:
     reader = csv.DictReader(file)
     for row in reader:
-        db = Ingredient(
-            name=row['name'],
-            measurement_unit=row['measurement_unit'],
-        )
-        db.save()
+        Ingredient.objects.get_or_create(**row)
