@@ -87,9 +87,11 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             sudo docker-compose stop
-            sudo docker-compose rm web
+            sudo docker-compose rm backend
+            sudo docker-compose rm frontend
+            sudo rm -f .env
+
             touch .env
-            
             sudo echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
             sudo echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             sudo echo DB_NAME=${{ secrets.DB_NAME }} >> .env
@@ -98,12 +100,9 @@ jobs:
             sudo echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             sudo echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             
-            sudo docker compose rm backend
-            sudo docker compose pull backend
-            sudo docker compose rm frontend
-            sudo docker compose pull frontend
-            
-            sudo docker compose up -d --build
+            sudo docker-compose pull backend
+            sudo docker-compose pull frontend
+            sudo docker-compose up -d
 
   send_message:
     name: Sending Telegram message
