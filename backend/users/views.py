@@ -1,4 +1,4 @@
-from api.v1 import serializers
+from api.v1.serializers import CustomUserSerializer, SubscribeSerializer
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
 from rest_framework import status
@@ -11,7 +11,7 @@ from .models import Subscribe, User
 
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
-    serializer_class = serializers.CustomUserSerializer
+    serializer_class = CustomUserSerializer
 
     @action(
         detail=True,
@@ -24,7 +24,7 @@ class CustomUserViewSet(UserViewSet):
         author = get_object_or_404(User, id=author_id)
 
         if request.method == 'POST':
-            serializer = serializers.SubscribeSerializer(
+            serializer = SubscribeSerializer(
                 author,
                 data=request.data,
                 context={"request": request},
@@ -51,7 +51,7 @@ class CustomUserViewSet(UserViewSet):
         user = request.user
         queryset = User.objects.filter(subscribing__user=user)
         pages = self.paginate_queryset(queryset)
-        serializer = serializers.SubscribeSerializer(
+        serializer = SubscribeSerializer(
             pages,
             many=True,
             context={'request': request},
