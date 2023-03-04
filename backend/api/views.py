@@ -26,7 +26,6 @@ from recipes.models import (FavoriteRecipe, Ingredient, Recipe,
 
 from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsAdminOrReadOnly
-from .pagination import LimitPagination
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, SubscribeRecipeSerializer,
                           SubscribeSerializer, TagSerializer, TokenSerializer,
@@ -50,17 +49,10 @@ class GetObjectMixin:
         return recipe
 
 
-class PermissionAndPaginationMixin:
-    """Миксина для списка тегов и ингридиентов."""
-
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = LimitPagination
-
-
 class AddAndDeleteSubscribe(
         generics.RetrieveDestroyAPIView,
         generics.ListCreateAPIView):
-    """Подписка и отписка от пользователя."""
+    """Класс для создания и удаления подписок."""
 
     serializer_class = SubscribeSerializer
 
@@ -83,11 +75,11 @@ class AddAndDeleteSubscribe(
         instance = self.get_object()
         if request.user.id == instance.id:
             return Response(
-                {'errors': 'На самого себя не подписаться!'},
+                {'errors': 'Нельзя подписаться на себя.'},
                 status=status.HTTP_400_BAD_REQUEST)
         if request.user.follower.filter(author=instance).exists():
             return Response(
-                {'errors': 'Уже подписан!'},
+                {'errors': 'Вы уже подписаны на этого пользователя.'},
                 status=status.HTTP_400_BAD_REQUEST)
         subs = request.user.follower.create(author=instance)
         serializer = self.get_serializer(subs)
@@ -101,7 +93,7 @@ class AddDeleteFavoriteRecipe(
         GetObjectMixin,
         generics.RetrieveDestroyAPIView,
         generics.ListCreateAPIView):
-    """Добавление и удаление рецепта в/из избранных."""
+    """Добавление и удаление рецепта из списка избранных."""
 
     def create(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -117,7 +109,7 @@ class AddDeleteShoppingCart(
         GetObjectMixin,
         generics.RetrieveDestroyAPIView,
         generics.ListCreateAPIView):
-    """Добавление и удаление рецепта в/из корзины."""
+    """Добавление и удаление рецепта из корзины."""
 
     def create(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -146,7 +138,7 @@ class AuthToken(ObtainAuthToken):
 
 
 class UsersViewSet(UserViewSet):
-    """Пользователи."""
+    """Вьюсет для работы с моделью пользователя."""
 
     serializer_class = UserListSerializer
     permission_classes = (IsAuthenticated,)
@@ -174,7 +166,7 @@ class UsersViewSet(UserViewSet):
         detail=False,
         permission_classes=(IsAuthenticated,))
     def subscriptions(self, request):
-        """Получить на кого пользователь подписан."""
+        """Возвращает список подписок пользователя."""
 
         user = request.user
         queryset = Subscribe.objects.filter(user=user)
@@ -264,7 +256,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return FileResponse(buffer, as_attachment=True, filename=FILENAME)
 
 
-class TagViewSet(ReadOnlyModelViewSet):
+class TagsViewSet(ReadOnlyModelViewSet):
     """Cписок тегов для статей."""
 
     queryset = Tag.objects.all()
@@ -272,8 +264,9 @@ class TagViewSet(ReadOnlyModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class IngredientViewSet(ReadOnlyModelViewSet):
+class IngredientsViewSet(ReadOnlyModelViewSet):
     """Вьюсет для выбора ингредиентов."""
+
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -283,7 +276,7 @@ class IngredientViewSet(ReadOnlyModelViewSet):
 
 @api_view(['post'])
 def set_password(request):
-    """Изменить пароль."""
+    """Функция для изменения пароля."""
 
     serializer = UserPasswordSerializer(
         data=request.data,
@@ -291,8 +284,8 @@ def set_password(request):
     if serializer.is_valid():
         serializer.save()
         return Response(
-            {'message': 'Пароль изменен!'},
+            {'message': 'Пароль успешно изменен.'},
             status=status.HTTP_201_CREATED)
     return Response(
-        {'error': 'Введите верные данные!'},
+        {'error': 'Некорректные данные.'},
         status=status.HTTP_400_BAD_REQUEST)
