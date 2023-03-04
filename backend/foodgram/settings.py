@@ -162,7 +162,7 @@ USE_TZ = True
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOWED_ORIGINS = [
     'https://pavlikovs-foodgram.sytes.net',
-    'https://www.pavlikovs-foodgram.sytes.net'
+    'https://www.pavlikovs-foodgram.sytes.net',
     'http://localhost:3000',
 ]
 CORS_URLS_REGEX = r'^/api/.*$'
