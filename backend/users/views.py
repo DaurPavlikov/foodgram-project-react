@@ -1,3 +1,4 @@
+from api.pagination import LimitPagination
 from api.serializers import CustomUserSerializer, SubscribeSerializer
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
@@ -12,6 +13,7 @@ from .models import Subscribe, User
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
+    pagination_class = LimitPagination
 
     @action(
         detail=True,
