@@ -3,7 +3,7 @@ import os
 
 from django.conf import settings
 from django.core.management import BaseCommand
-from base.models import Ingredient
+from recipes.models import Ingredient
 
 
 class Command(BaseCommand):

@@ -21,9 +21,10 @@ from rest_framework.response import Response
 
 from api.filters import IngredientFilter, RecipeFilter
 from api.permissions import IsAdminOrReadOnly
-from base.models import (FavoriteRecipe, Ingredient, Recipe,
-                         ShoppingCart, Subscribe, Tag,)
+from recipes.models import (FavoriteRecipe, Ingredient, Recipe,
+                            ShoppingCart, Subscribe, Tag,)
 
+from .pagination import LimitPagination
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, SubscribeRecipeSerializer,
                           SubscribeSerializer, TagSerializer, TokenSerializer,
@@ -51,7 +52,7 @@ class PermissionAndPaginationMixin:
     """Миксина для списка тегов и ингридиентов."""
 
     permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = None
+    pagination_class = LimitPagination
 
 
 class AddAndDeleteSubscribe(
