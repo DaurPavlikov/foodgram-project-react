@@ -6,6 +6,7 @@ from django.db.models.aggregates import Count, Sum
 from django.db.models.expressions import Exists, OuterRef, Value
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework.backends import DjangoFilterBackend
 from djoser.views import UserViewSet
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -19,11 +20,12 @@ from rest_framework.permissions import (SAFE_METHODS, AllowAny,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
-from api.filters import IngredientFilter, RecipeFilter
-from api.permissions import IsAdminOrReadOnly
 from recipes.models import (FavoriteRecipe, Ingredient, Recipe,
                             ShoppingCart, Subscribe, Tag,)
 
+from .filters import IngredientFilter, RecipeFilter
+from .permissions import IsAdminOrReadOnly
+from .mixins import ListRetriveViewSet
 from .pagination import LimitPagination
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, SubscribeRecipeSerializer,
@@ -226,7 +228,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
         buffer = io.BytesIO()
         page = canvas.Canvas(buffer)
-        pdfmetrics.registerFont(TTFont('Vera', 'Vera.ttf'))
+        pdfmetrics.registerFont(TTFont('DejaVu Sans', 'DejaVuSansMono.ttf'))
         x_position, y_position = 50, 800
         shopping_cart = (
             request.user.shopping_cart.recipe.
@@ -262,23 +264,20 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return FileResponse(buffer, as_attachment=True, filename=FILENAME)
 
 
-class TagsViewSet(
-        PermissionAndPaginationMixin,
-        viewsets.ModelViewSet):
-    """Список тэгов."""
+class TagsViewSet(ListRetriveViewSet):
+    """Выпадающий список тегов."""
 
-    queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    queryset = Tag.objects.all()
+    http_method_names = ('get',)
 
 
-class IngredientsViewSet(
-        PermissionAndPaginationMixin,
-        viewsets.ModelViewSet):
-    """Список ингредиентов."""
-
-    queryset = Ingredient.objects.all()
+class IngredientsViewSet(ListRetriveViewSet):
     serializer_class = IngredientSerializer
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = IngredientFilter
+    queryset = Ingredient.objects.all()
+    http_method_names = ('get',)
 
 
 @api_view(['post'])
