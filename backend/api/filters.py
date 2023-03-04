@@ -1,7 +1,6 @@
-from django.db.models import IntegerField, Value
 from django.core.exceptions import ValidationError
 import django_filters as filters
-from django_filters.rest_framework import CharFilter, FilterSet
+from django_filters.rest_framework import FilterSet
 
 from users.models import User
 from recipes.models import Ingredient, Recipe
@@ -27,28 +26,11 @@ class TagsFilter(filters.AllValuesMultipleFilter):
 
 
 class IngredientFilter(FilterSet):
-    name = CharFilter(method='search_by_name')
+    name = filters.CharFilter(lookup_expr='startswith')
 
     class Meta:
         model = Ingredient
-        fields = ('name',)
-
-    def search_by_name(self, queryset, name, value):
-        if not value:
-            return queryset
-        start_with_queryset = (
-            queryset.filter(name__istartswith=value).annotate(
-                order=Value(0, IntegerField())
-            )
-        )
-        contain_queryset = (
-            queryset.filter(name__icontains=value).exclude(
-                pk__in=(ingredient.pk for ingredient in start_with_queryset)
-            ).annotate(
-                order=Value(1, IntegerField())
-            )
-        )
-        return start_with_queryset.union(contain_queryset).order_by('order')
+        fields = ['name']
 
 
 class RecipeFilter(filters.FilterSet):

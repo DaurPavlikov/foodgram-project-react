@@ -18,6 +18,7 @@ from rest_framework.decorators import action, api_view
 from rest_framework.permissions import (SAFE_METHODS, AllowAny,
                                         IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 
 from recipes.models import (FavoriteRecipe, Ingredient, Recipe,
@@ -25,7 +26,6 @@ from recipes.models import (FavoriteRecipe, Ingredient, Recipe,
 
 from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsAdminOrReadOnly
-from .mixins import ListRetriveViewSet
 from .pagination import LimitPagination
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, SubscribeRecipeSerializer,
@@ -224,7 +224,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         methods=['get'],
         permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, request):
-        """Качаем список с ингредиентами."""
+        """Создание списка с ингредиентами."""
 
         buffer = io.BytesIO()
         page = canvas.Canvas(buffer)
@@ -258,26 +258,27 @@ class RecipesViewSet(viewsets.ModelViewSet):
         page.drawString(
             x_position,
             y_position,
-            'Cписок покупок пуст!')
+            'В списке покупок ничего нет.')
         page.save()
         buffer.seek(0)
         return FileResponse(buffer, as_attachment=True, filename=FILENAME)
 
 
-class TagsViewSet(ListRetriveViewSet):
-    """Выпадающий список тегов."""
+class TagViewSet(ReadOnlyModelViewSet):
+    """Cписок тегов для статей."""
 
-    serializer_class = TagSerializer
     queryset = Tag.objects.all()
-    http_method_names = ('get',)
+    serializer_class = TagSerializer
+    permission_classes = (IsAdminOrReadOnly,)
 
 
-class IngredientsViewSet(ListRetriveViewSet):
+class IngredientViewSet(ReadOnlyModelViewSet):
+    """Вьюсет для выбора ингредиентов."""
+    queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
+    permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = IngredientFilter
-    queryset = Ingredient.objects.all()
-    http_method_names = ('get',)
 
 
 @api_view(['post'])
