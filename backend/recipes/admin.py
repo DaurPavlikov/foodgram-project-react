@@ -50,34 +50,28 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'name', 'color', 'slug',)
+    list_display = ('id', 'name', 'color', 'slug',)
     search_fields = ('name', 'slug',)
     empty_value_display = EMPTY_MSG
 
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'name', 'measurement_unit',)
-    search_fields = (
-        'name', 'measurement_unit',)
+    list_display = ('id', 'name', 'measurement_unit',)
+    search_fields = ('name', 'measurement_unit',)
     empty_value_display = EMPTY_MSG
 
 
 @admin.register(Subscribe)
 class SubscribeAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'user', 'author', 'created',)
-    search_fields = (
-        'user__email', 'author__email',)
+    list_display = ('id', 'user', 'author', 'created',)
+    search_fields = ('user__email', 'author__email',)
     empty_value_display = EMPTY_MSG
 
 
 @admin.register(FavoriteRecipe)
 class FavoriteRecipeAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'user', 'get_recipe', 'get_count')
+    list_display = ('id', 'user', 'get_recipe', 'get_count')
     empty_value_display = EMPTY_MSG
 
     @admin.display(
