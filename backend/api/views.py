@@ -6,7 +6,6 @@ from django.db.models.aggregates import Count, Sum
 from django.db.models.expressions import Exists, OuterRef, Value
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework.backends import DjangoFilterBackend
 from djoser.views import UserViewSet
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -25,8 +24,6 @@ from recipes.models import (FavoriteRecipe, Ingredient, Recipe,
                             ShoppingCart, Subscribe, Tag,)
 
 from .filters import IngredientFilter, RecipeFilter
-from .pagination import LimitPagination
-from .permissions import IsAdminOrReadOnly
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, SubscribeRecipeSerializer,
                           SubscribeSerializer, TagSerializer, TokenSerializer,
@@ -221,7 +218,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
         buffer = io.BytesIO()
         page = canvas.Canvas(buffer)
-        pdfmetrics.registerFont(TTFont('Arial', 'arial.ttf'))
+        pdfmetrics.registerFont(TTFont('DejaVuSans', 'DejaVuSans.ttf'))
         x_position, y_position = 50, 800
         shopping_cart = (
             request.user.shopping_cart.recipe.
@@ -229,7 +226,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 'ingredients__name',
                 'ingredients__measurement_unit'
             ).annotate(amount=Sum('recipe__amount')).order_by())
-        page.setFont('Arial', 14)
+        page.setFont('DejaVuSans', 14)
         if shopping_cart:
             indent = 20
             page.drawString(x_position, y_position, 'Cписок покупок:')
@@ -247,7 +244,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
             buffer.seek(0)
             return FileResponse(
                 buffer, as_attachment=True, filename=FILENAME)
-        page.setFont('Arial', 24)
+        page.setFont('DejaVuSans', 24)
         page.drawString(
             x_position,
             y_position,
@@ -263,7 +260,7 @@ class TagsViewSet(ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (AllowAny,)
-    pagination_class = LimitPagination
+    pagination_class = None
 
 
 class IngredientsViewSet(ReadOnlyModelViewSet):
@@ -271,9 +268,9 @@ class IngredientsViewSet(ReadOnlyModelViewSet):
 
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (DjangoFilterBackend,)
-    filterset_class = IngredientFilter
+    permission_classes = (AllowAny,)
+    pagination_class = None
+    filter_backends = (IngredientFilter,)
     search_fields = ('^name',)
 
 
