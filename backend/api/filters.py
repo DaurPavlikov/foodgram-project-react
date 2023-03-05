@@ -1,9 +1,9 @@
 from django.core.exceptions import ValidationError
 import django_filters as filters
-from django_filters.rest_framework import FilterSet
+from rest_framework.filters import SearchFilter
 
 from users.models import User
-from recipes.models import Ingredient, Recipe
+from recipes.models import Recipe
 
 
 class TagsMultipleChoiceField(
@@ -25,12 +25,8 @@ class TagsFilter(filters.AllValuesMultipleFilter):
     field_class = TagsMultipleChoiceField
 
 
-class IngredientFilter(FilterSet):
-    name = filters.CharFilter(lookup_expr='startswith')
-
-    class Meta:
-        model = Ingredient
-        fields = ['name']
+class IngredientFilter(SearchFilter):
+    search_param = 'name'
 
 
 class RecipeFilter(filters.FilterSet):

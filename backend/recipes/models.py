@@ -3,6 +3,7 @@ from django.core import validators
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -26,11 +27,11 @@ class Ingredient(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(
-        'Имя',
+        'Название',
         max_length=60,
         unique=True)
     color = models.CharField(
-        'Цвет',
+        'Цвет в HEX',
         max_length=7,
         unique=True)
     slug = models.SlugField(
@@ -45,6 +46,9 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('tag', args=[self.slug])
 
 
 class Recipe(models.Model):
