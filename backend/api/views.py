@@ -1,5 +1,7 @@
 import io
+import os
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.db.models.aggregates import Count, Sum
@@ -218,7 +220,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
         buffer = io.BytesIO()
         page = canvas.Canvas(buffer)
-        pdfmetrics.registerFont(TTFont('DejaVuSans', 'DejaVuSans.ttf'))
+        font_path = os.path.join(settings.BASE_DIR, 'data/Hack-Regular.ttf')
+        pdfmetrics.registerFont(TTFont('Hack', font_path))
         x_position, y_position = 50, 800
         shopping_cart = (
             request.user.shopping_cart.recipe.
@@ -226,7 +229,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 'ingredients__name',
                 'ingredients__measurement_unit'
             ).annotate(amount=Sum('recipe__amount')).order_by())
-        page.setFont('DejaVuSans', 14)
+        page.setFont('Hack', 14)
         if shopping_cart:
             indent = 20
             page.drawString(x_position, y_position, 'Cписок покупок:')
@@ -244,7 +247,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
             buffer.seek(0)
             return FileResponse(
                 buffer, as_attachment=True, filename=FILENAME)
-        page.setFont('DejaVuSans', 24)
+        page.setFont('Hack', 24)
         page.drawString(
             x_position,
             y_position,
