@@ -16,24 +16,41 @@ from rest_framework import generics, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.decorators import action, api_view
-from rest_framework.permissions import (SAFE_METHODS, AllowAny,
-                                        IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (
+    SAFE_METHODS,
+    AllowAny,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly
+)
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 
-from recipes.models import (FavoriteRecipe, Ingredient, Recipe,
-                            ShoppingCart, Subscribe, Tag,)
+from recipes.models import (
+    FavoriteRecipe,
+    Ingredient,
+    Recipe,
+    ShoppingCart,
+    Subscribe,
+    Tag,
+)
 
 from .filters import IngredientFilter, RecipeFilter
-from .serializers import (IngredientSerializer, RecipeReadSerializer,
-                          RecipeWriteSerializer, SubscribeRecipeSerializer,
-                          SubscribeSerializer, TagSerializer, TokenSerializer,
-                          UserCreateSerializer, UserListSerializer,
-                          UserPasswordSerializer)
+from .serializers import (
+    IngredientSerializer,
+    RecipeReadSerializer,
+    RecipeWriteSerializer,
+    SubscribeRecipeSerializer,
+    SubscribeSerializer,
+    TagSerializer,
+    TokenSerializer,
+    UserCreateSerializer,
+    UserListSerializer,
+    UserPasswordSerializer,
+)
 
 User = get_user_model()
 FILENAME = 'shoppingcart.pdf'
+FONT_PATH = os.path.join(settings.BASE_DIR, 'data/Hack-Regular.ttf')
 
 
 class GetObjectMixin:
@@ -220,8 +237,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
         buffer = io.BytesIO()
         page = canvas.Canvas(buffer)
-        font_path = os.path.join(settings.BASE_DIR, 'data/Hack-Regular.ttf')
-        pdfmetrics.registerFont(TTFont('Hack', font_path))
+        pdfmetrics.registerFont(TTFont('Hack', FONT_PATH))
         x_position, y_position = 50, 800
         shopping_cart = (
             request.user.shopping_cart.recipe.
@@ -229,7 +245,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 'ingredients__name',
                 'ingredients__measurement_unit'
             ).annotate(amount=Sum('recipe__amount')).order_by())
-        page.setFont('Hack', 14)
+        page.setFont('Hack', 16)
         if shopping_cart:
             indent = 20
             page.drawString(x_position, y_position, 'Cписок покупок:')
@@ -247,7 +263,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
             buffer.seek(0)
             return FileResponse(
                 buffer, as_attachment=True, filename=FILENAME)
-        page.setFont('Hack', 24)
+        page.setFont('Hack', 26)
         page.drawString(
             x_position,
             y_position,

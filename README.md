@@ -3,9 +3,10 @@
 ![Workflow Status](https://github.com/Koloyojik/ foodgram-project-react/actions/workflows/yamdb_workflow.yml/badge.svg?branch=master&event=push)
 
 **Примеы работы на сервере:**
-- [**ReDoc на сервере**](http://158.160.17.231/redoc/)
-- [**Пример endpoints для API на сервере**](http://158.160.17.231/api/v1/)
-- [**Пример работы БД на сервере в разделе Жанры**](http://158.160.17.231/api/v1/genres/)
+- [**Главная страница**](http://158.160.17.231/)
+- [**ReDoc на сервере**](http://158.160.17.231/api/dock/)
+- [**Раздел Django Admin на сервере**](http://158.160.17.231/api/admin/)
+- [**Пример endpoints для API на сервере**](http://158.160.17.231/api/)
 
 
 **Описание**
@@ -29,7 +30,7 @@
 
 Перед развёртыванием проекта на сервере необходимо остановить работу *nginx*
 ```bash
-sudo systemctl stop nginx 
+sudo systemctl disable nginx 
 ```
 
 После этого необходимо обновить *docker-compose* до последней версии:
@@ -61,8 +62,14 @@ docker-compose
 - **POSTGRES_PASSWORD** - Пароль доступа к БД
 - **DB_HOST** - IP-адрес на котором запущена БД
 - **DB_PORT** - порт через который работает БД
+- **DEBUG** - Режим отладки Django, может быть *True* или *False*
 
-После обновления репозитория, GitHub Actions должен создать *user-db-1* и *user-nginx-1*, а так же загрузить контейнер web из репозитория DockerHub koloyojik/api_yamdb:latest на сервер:
+После обновления репозитория, GitHub Actions должен создать *user-db-1* и *user-nginx-1*, а так же загрузить контейнеры backend и frontend из репозитория DockerHub user/foodgram_backend:latest и user/foodgram_frontend:latest на сервер:
+
+Перед началом развёртывания необходимо перенести файлы nginx/default.conf и docker-compose.yml на сервер при помощи утилиты **scp**:
+```bash
+scp -r /path/to/infra/ user_name@host_ip:/path/to/work_directory
+```
 
 Необходимо подключиться к удалённому серверу по SSH:
 ```bash
@@ -75,23 +82,33 @@ sudo docker container ls
 
 Выполняем миграции для базы данных и собираем статику в контейнер:
 ```bash
-sudo docker-compose exec web python manage.py makemigrations
-sudo docker-compose exec web python manage.py migrate
-sudo docker-compose exec web python manage.py collectstatic --no-input
+sudo docker-compose exec backend python manage.py makemigrations
+sudo docker-compose exec backend python manage.py migrate
+sudo docker-compose exec backend python manage.py collectstatic --no-input
+```
+В проекте предусмотрены готовые скрипты для импорта в базу данных ингридиентов из файла csv и генерация тегов для правильной работы сервиса:
+```bash
+sudo docker-compose exec backend python manage.py import_ingredients_from_csv
+sudo docker-compose exec backend python manage.py import_tags
 ```
 Загружаем данные в базу из резервной копии, если она есть, *fixtures.json*:
 ```bash
 sudo docker cp ./fixtures.json <container_id>:/app/fixtures.json
-sudo docker-compose exec web python manage.py loaddata fixtures.json
+sudo docker-compose exec backend python manage.py loaddata fixtures.json
 ```
-Или создаем суперпользователя для заполнения новой базы данных:
+Создаем суперпользователя, если необходимо:
 ```bash
-sudo docker-compose exec web python manage.py createsuperuser
+sudo docker-compose exec backend python manage.py createsuperuser
 ```
 
 Перед остановкой контейнера необходимо создать резервную копию баз данных командой:
 ```bash
-sudo docker-compose exec web python manage.py dumpdata > fixtures.json
+sudo docker-compose exec backend python manage.py dumpdata > fixtures.json
+```
+Остановка контейнеров производится командами:
+```bash
+sudo docker-compose down -v (если необходимо очистить данные Value)
+sudo docker-compose stop (обычная остановка)
 ```
 
 Автор: [**Даур Павликов**](https://github.com/Koloyojik)

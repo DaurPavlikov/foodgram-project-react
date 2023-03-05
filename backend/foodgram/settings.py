@@ -33,7 +33,14 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'www.pavlikovs-foodgram.sytes.net',
+    'pavlikovs-foodgram.sytes.net',
+    '158.160.17.231',
+    'localhost',
+    '127.0.0.1',
+    '[::1]',
+]
 
 
 # Application definition
@@ -150,12 +157,16 @@ USE_L10N = True
 USE_TZ = True
 
 # CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOWED_ORIGINS = [
-    'https://pavlikovs-foodgram.sytes.net',
-    'https://www.pavlikovs-foodgram.sytes.net',
-    'http://localhost:3000',
+CORS_URLS_REGEXES = [
+    r'^/api/.*$',
 ]
-CORS_URLS_REGEX = r'^/api/.*$'
+
+CORS_ALLOWED_ORIGINS = [
+    'http://158.160.17.231',
+    'http://localhost',
+    'http://127.0.0.1',
+    'http://[::1]'
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
