@@ -2,12 +2,17 @@
 ## Backend-разработка, сборка docker-контейнеров и развёртывание на удалённом сервере с применением GitHub Actions и DockerHub
 ![Workflow Status](https://github.com/Koloyojik/ foodgram-project-react/actions/workflows/yamdb_workflow.yml/badge.svg?branch=master&event=push)
 
-**Примеы работы на сервере:**
+**Примеры работы на сервере:**
 - [**Главная страница**](http://158.160.17.231/)
-- [**ReDoc на сервере**](http://158.160.17.231/api/dock/)
-- [**Раздел Django Admin на сервере**](http://158.160.17.231/api/admin/)
+- [**Раздел Django Admin на сервере**](http://158.160.17.231/admin/)
 - [**Пример endpoints для API на сервере**](http://158.160.17.231/api/)
+- [**ReDoc на сервере**](http://158.160.17.231/api/docs/)
 
+Для входа в админку:
+```bash
+login: admin@admin.ru
+password: admin 
+```
 
 **Описание**
 

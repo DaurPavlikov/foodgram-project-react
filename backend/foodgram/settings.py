@@ -34,8 +34,6 @@ SECRET_KEY = (
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 
 ALLOWED_HOSTS = [
-    'www.pavlikovs-foodgram.sytes.net',
-    'pavlikovs-foodgram.sytes.net',
     '158.160.17.231',
     'localhost',
     '127.0.0.1',
@@ -159,6 +157,7 @@ USE_TZ = True
 # CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEXES = [
     r'^/api/.*$',
+    r'^/admin/.*$',
 ]
 
 CORS_ALLOWED_ORIGINS = [
