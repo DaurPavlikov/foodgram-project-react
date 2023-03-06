@@ -37,12 +37,11 @@ class RecipeAdmin(admin.ModelAdmin):
         'author__email',
         'ingredients__name'
     )
-    list_filter = ('pub_date', 'name', 'get_author', 'tags',)
+    list_filter = ('pub_date', 'name', 'author', 'tags',)
     inlines = (RecipeIngredientAdmin,)
     empty_value_display = EMPTY_DISPLAY
 
-    @admin.display(
-        description='Электронная почта автора')
+    @admin.display(description='Электронная почта автора')
     def get_author(self, obj):
         return obj.author.email
 
@@ -113,7 +112,8 @@ class SoppingCartAdmin(admin.ModelAdmin):
     @admin.display(description='Рецепты')
     def get_recipe(self, obj):
         return [
-            f'{item["name"]} ' for item in obj.recipe.values('name')[:5]]
+            f'{item["name"]} ' for item in obj.recipe.values('name')[:5]
+        ]
 
     @admin.display(description='В избранных')
     def get_count(self, obj):
