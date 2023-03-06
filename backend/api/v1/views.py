@@ -27,7 +27,7 @@ from recipes.models import (
     Tag,
 )
 
-from .filters import IngredientFilter, RecipeFilter
+from .filters import IngredientsFilter, RecipeFilter
 from .mixins import GetObjectMixin
 from .serializers import (
     IngredientSerializer,
@@ -259,7 +259,7 @@ class IngredientsViewSet(ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     permission_classes = (AllowAny,)
     pagination_class = None
-    filter_backends = (IngredientFilter,)
+    filter_backends = (IngredientsFilter,)
     search_fields = ('^name',)
 
 
