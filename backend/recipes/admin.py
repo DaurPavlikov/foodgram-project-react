@@ -21,13 +21,23 @@ class RecipeIngredientAdmin(admin.StackedInline):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'get_author', 'name', 'text',
-        'cooking_time', 'get_tags', 'get_ingredients',
-        'pub_date', 'get_favorite_count')
+        'id',
+        'get_author',
+        'name',
+        'text',
+        'cooking_time',
+        'get_tags',
+        'get_ingredients',
+        'pub_date',
+        'get_favorite_count',
+    )
     search_fields = (
-        'name', 'cooking_time',
-        'author__email', 'ingredients__name')
-    list_filter = ('pub_date', 'tags',)
+        'name',
+        'cooking_time',
+        'author__email',
+        'ingredients__name'
+    )
+    list_filter = ('pub_date', 'name', 'get_author', 'tags',)
     inlines = (RecipeIngredientAdmin,)
     empty_value_display = EMPTY_DISPLAY
 
@@ -66,6 +76,7 @@ class TagAdmin(admin.ModelAdmin):
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'measurement_unit',)
     search_fields = ('name', 'measurement_unit',)
+    list_filter = ('name',)
     empty_value_display = EMPTY_DISPLAY
 
 

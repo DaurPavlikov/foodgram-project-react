@@ -1,1 +1,627 @@
-[{"model": "users.user", "pk": 1, "fields": {"password": "pbkdf2_sha256$260000$GGQydObEX9a1j1Nf5rheJi$00J/4oSJawur+b/QyMXJI9uXy7AJuy95x9aBYkwdNo8=", "last_login": null, "is_superuser": false, "username": "pavlikoff", "is_staff": false, "is_active": true, "date_joined": "2023-03-05T10:38:49.946Z", "email": "d.pavlikoff@gmail.com", "first_name": "Даур", "last_name": "Павликов", "groups": [], "user_permissions": []}}, {"model": "users.user", "pk": 2, "fields": {"password": "pbkdf2_sha256$260000$f3A3j2o1TKlvoXrm3tZ5V6$lHWH3/2bbhec2qAsEO3nGVXcNp0B6+UxlVHUbeLcAg8=", "last_login": "2023-03-05T11:01:36.537Z", "is_superuser": true, "username": "admin", "is_staff": true, "is_active": true, "date_joined": "2023-03-05T10:53:07.848Z", "email": "admin@admin.ru", "first_name": "Артёмий", "last_name": "Петрович", "groups": [], "user_permissions": []}}, {"model": "users.user", "pk": 3, "fields": {"password": "pbkdf2_sha256$260000$F2cnegfFg9VZBndYkd7Vc2$oZOzvnVMCcCJjsw7AtxYzp0v6GgDgTO02Q8xQro89Vg=", "last_login": null, "is_superuser": false, "username": "xenia", "is_staff": false, "is_active": true, "date_joined": "2023-03-05T11:18:26.779Z", "email": "xenia@xenia.ru", "first_name": "Ксения", "last_name": "Борисовна", "groups": [], "user_permissions": []}},{"model": "recipes.recipe", "pk": 1, "fields": {"author": 1, "name": "Кофе с авокадо", "image": "static/recipe/f371aee1-2857-4ee6-850a-3514cfe51a84.jpeg", "text": "Установите в соковыжималку решётку для смузи и пропустите через неё подготовленный авокадо. Заполните стакан льдом на ⅓, влейте молоко, положите авокадо и в довершение налейте эспрессо.", "cooking_time": 10, "pub_date": "2023-03-05T10:43:59.014Z", "tags": [2]}}, {"model": "recipes.recipe", "pk": 2, "fields": {"author": 1, "name": "Суп с фрикадельками", "image": "static/recipe/ef238ee6-67c0-44d7-be1d-02d2a42143cd.jpeg", "text": "Сварите бульон, положите в него вариться шарики из фарша, затем добавьте картошку, и когда она размягчится добавьте обжаренные морковь и лук. При подаче посыпьте укропом.", "cooking_time": 60, "pub_date": "2023-03-05T11:07:09.968Z", "tags": [1]}}, {"model": "recipes.recipe", "pk": 3, "fields": {"author": 1, "name": "Паста", "image": "static/recipe/7d92e282-5fa2-4337-b472-4cdd66bd74d5.jpeg", "text": "Отварите спагетти (не ломая), заправьте томатным соусом, посыпьте сыром и базиликом.", "cooking_time": 30, "pub_date": "2023-03-05T11:16:20.963Z", "tags": [0]}}, {"model": "recipes.recipe", "pk": 4, "fields": {"author": 3, "name": "Блины", "image": "static/recipe/1f0532d3-99a7-4979-aa83-98919540895e.jpeg", "text": "Замешать все ингредиенты в тесто и пожарить на сковородке. Подавать со сливочным маслом.", "cooking_time": 30, "pub_date": "2023-03-05T11:55:26.191Z", "tags": [2]}}, {"model": "recipes.recipe", "pk": 5, "fields": {"author": 3, "name": "Борщ", "image": "static/recipe/072170c9-e7d8-454b-b2a3-8e1af99125c2.jpeg", "text": "В бульон положите нарезанный брусочками картофель, варить до размягчения. Свеклу, лук, морковь, помидоры нарежте соломкой и обжарьте на сковороде, выложите в бульон. Соль и перец по вкусу. Подавать со сметаной", "cooking_time": 60, "pub_date": "2023-03-05T12:04:45.011Z", "tags": [1]}}, {"model": "recipes.recipe", "pk": 6, "fields": {"author": 3, "name": "Плов", "image": "static/recipe/f0f1e89f-5281-4b33-8184-ee5523795bd2.jpeg", "text": "Лук и морковь режем соломкой. В разогретом казане обжариваем лук и мясо, почти до готовности, добавляем морковь, соль и специи, промытый рис. Заливаем водой, чтобы рис был накрыт на 2-2,5 см. После закипания накрываем крышкой и варим на минимальном огне 20 минут. Дайте рису настояться 15 минут и подавайте к столу.", "cooking_time": 60, "pub_date": "2023-03-05T12:31:54.711Z", "tags": [0]}}, {"model": "recipes.recipe", "pk": 7, "fields": {"author": 1, "name": "Какао", "image": "static/recipe/c9b1dbe3-0397-406b-af06-d2778d4e1409.jpeg", "text": "В молоко, аккуратно помешивая, добавьте какао-порошок. Мешать, пока молоко не закипит, после чего наливайте в стакан или кружку.", "cooking_time": 15, "pub_date": "2023-03-05T12:51:51.044Z", "tags": [2]}}]
+[
+    {
+        "model": "users.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$GGQydObEX9a1j1Nf5rheJi$00J/4oSJawur+b/QyMXJI9uXy7AJuy95x9aBYkwdNo8=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "pavlikoff",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-03-05T10:38:49.946Z",
+            "email": "d.pavlikoff@gmail.com",
+            "first_name": "Даур",
+            "last_name": "Павликов",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$f3A3j2o1TKlvoXrm3tZ5V6$lHWH3/2bbhec2qAsEO3nGVXcNp0B6+UxlVHUbeLcAg8=",
+            "last_login": "2023-03-05T11:01:36.537Z",
+            "is_superuser": true,
+            "username": "admin",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-03-05T10:53:07.848Z",
+            "email": "admin@admin.ru",
+            "first_name": "Артёмий",
+            "last_name": "Петрович",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$F2cnegfFg9VZBndYkd7Vc2$oZOzvnVMCcCJjsw7AtxYzp0v6GgDgTO02Q8xQro89Vg=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "xenia",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-03-05T11:18:26.779Z",
+            "email": "xenia@xenia.ru",
+            "first_name": "Ксения",
+            "last_name": "Борисовна",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 1,
+        "fields": {
+            "author": 1,
+            "name": "Кофе с авокадо",
+            "image": "static/recipe/f371aee1-2857-4ee6-850a-3514cfe51a84.jpeg",
+            "text": "Установите в соковыжималку решётку для смузи и пропустите через неё подготовленный авокадо. Заполните стакан льдом на ⅓, влейте молоко, положите авокадо и в довершение налейте эспрессо.",
+            "cooking_time": 10,
+            "pub_date": "2023-03-05T10:43:59.014Z",
+            "tags": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 2,
+        "fields": {
+            "author": 1,
+            "name": "Суп с фрикадельками",
+            "image": "static/recipe/ef238ee6-67c0-44d7-be1d-02d2a42143cd.jpeg",
+            "text": "Сварите бульон, положите в него вариться шарики из фарша, затем добавьте картошку, и когда она размягчится добавьте обжаренные морковь и лук. При подаче посыпьте укропом.",
+            "cooking_time": 60,
+            "pub_date": "2023-03-05T11:07:09.968Z",
+            "tags": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 3,
+        "fields": {
+            "author": 1,
+            "name": "Паста",
+            "image": "static/recipe/7d92e282-5fa2-4337-b472-4cdd66bd74d5.jpeg",
+            "text": "Отварите спагетти (не ломая), заправьте томатным соусом, посыпьте сыром и базиликом.",
+            "cooking_time": 30,
+            "pub_date": "2023-03-05T11:16:20.963Z",
+            "tags": [
+                0
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 4,
+        "fields": {
+            "author": 3,
+            "name": "Блины",
+            "image": "static/recipe/1f0532d3-99a7-4979-aa83-98919540895e.jpeg",
+            "text": "Замешать все ингредиенты в тесто и пожарить на сковородке. Подавать со сливочным маслом.",
+            "cooking_time": 30,
+            "pub_date": "2023-03-05T11:55:26.191Z",
+            "tags": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 5,
+        "fields": {
+            "author": 3,
+            "name": "Борщ",
+            "image": "static/recipe/072170c9-e7d8-454b-b2a3-8e1af99125c2.jpeg",
+            "text": "В бульон положите нарезанный брусочками картофель, варить до размягчения. Свеклу, лук, морковь, помидоры нарежте соломкой и обжарьте на сковороде, выложите в бульон. Соль и перец по вкусу. Подавать со сметаной",
+            "cooking_time": 60,
+            "pub_date": "2023-03-05T12:04:45.011Z",
+            "tags": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 6,
+        "fields": {
+            "author": 3,
+            "name": "Плов",
+            "image": "static/recipe/f0f1e89f-5281-4b33-8184-ee5523795bd2.jpeg",
+            "text": "Лук и морковь режем соломкой. В разогретом казане обжариваем лук и мясо, почти до готовности, добавляем морковь, соль и специи, промытый рис. Заливаем водой, чтобы рис был накрыт на 2-2,5 см. После закипания накрываем крышкой и варим на минимальном огне 20 минут. Дайте рису настояться 15 минут и подавайте к столу.",
+            "cooking_time": 60,
+            "pub_date": "2023-03-05T12:31:54.711Z",
+            "tags": [
+                0
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 7,
+        "fields": {
+            "author": 1,
+            "name": "Какао",
+            "image": "static/recipe/c9b1dbe3-0397-406b-af06-d2778d4e1409.jpeg",
+            "text": "В молоко, аккуратно помешивая, добавьте какао-порошок. Мешать, пока молоко не закипит, после чего наливайте в стакан или кружку.",
+            "cooking_time": 15,
+            "pub_date": "2023-03-05T12:51:51.044Z",
+            "tags": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 1,
+        "fields": {
+            "recipe": 1,
+            "ingredient": 7,
+            "amount": 1
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 2,
+        "fields": {
+            "recipe": 1,
+            "ingredient": 828,
+            "amount": 50
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 3,
+        "fields": {
+            "recipe": 1,
+            "ingredient": 1036,
+            "amount": 50
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 4,
+        "fields": {
+            "recipe": 1,
+            "ingredient": 706,
+            "amount": 1
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 5,
+        "fields": {
+            "recipe": 2,
+            "ingredient": 1915,
+            "amount": 400
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 6,
+        "fields": {
+            "recipe": 2,
+            "ingredient": 556,
+            "amount": 300
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 7,
+        "fields": {
+            "recipe": 2,
+            "ingredient": 1053,
+            "amount": 150
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 8,
+        "fields": {
+            "recipe": 2,
+            "ingredient": 886,
+            "amount": 150
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 9,
+        "fields": {
+            "recipe": 2,
+            "ingredient": 1685,
+            "amount": 15
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 10,
+        "fields": {
+            "recipe": 2,
+            "ingredient": 1892,
+            "amount": 10
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 11,
+        "fields": {
+            "recipe": 2,
+            "ingredient": 167,
+            "amount": 1500
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 12,
+        "fields": {
+            "recipe": 3,
+            "ingredient": 1861,
+            "amount": 500
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 13,
+        "fields": {
+            "recipe": 3,
+            "ingredient": 1714,
+            "amount": 350
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 14,
+        "fields": {
+            "recipe": 3,
+            "ingredient": 1210,
+            "amount": 50
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 15,
+        "fields": {
+            "recipe": 3,
+            "ingredient": 1162,
+            "amount": 30
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 16,
+        "fields": {
+            "recipe": 3,
+            "ingredient": 2057,
+            "amount": 10
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 17,
+        "fields": {
+            "recipe": 3,
+            "ingredient": 1685,
+            "amount": 5
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 18,
+        "fields": {
+            "recipe": 3,
+            "ingredient": 79,
+            "amount": 10
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 19,
+        "fields": {
+            "recipe": 4,
+            "ingredient": 1036,
+            "amount": 500
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 20,
+        "fields": {
+            "recipe": 4,
+            "ingredient": 2182,
+            "amount": 120
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 21,
+        "fields": {
+            "recipe": 4,
+            "ingredient": 1081,
+            "amount": 200
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 22,
+        "fields": {
+            "recipe": 4,
+            "ingredient": 1647,
+            "amount": 30
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 23,
+        "fields": {
+            "recipe": 4,
+            "ingredient": 1685,
+            "amount": 3
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 24,
+        "fields": {
+            "recipe": 5,
+            "ingredient": 520,
+            "amount": 500
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 25,
+        "fields": {
+            "recipe": 5,
+            "ingredient": 556,
+            "amount": 300
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 26,
+        "fields": {
+            "recipe": 5,
+            "ingredient": 1342,
+            "amount": 200
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 27,
+        "fields": {
+            "recipe": 5,
+            "ingredient": 1241,
+            "amount": 200
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 28,
+        "fields": {
+            "recipe": 5,
+            "ingredient": 1569,
+            "amount": 300
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 29,
+        "fields": {
+            "recipe": 5,
+            "ingredient": 1053,
+            "amount": 200
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 30,
+        "fields": {
+            "recipe": 5,
+            "ingredient": 886,
+            "amount": 100
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 31,
+        "fields": {
+            "recipe": 5,
+            "ingredient": 1654,
+            "amount": 100
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 32,
+        "fields": {
+            "recipe": 5,
+            "ingredient": 167,
+            "amount": 1500
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 33,
+        "fields": {
+            "recipe": 6,
+            "ingredient": 1053,
+            "amount": 500
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 34,
+        "fields": {
+            "recipe": 6,
+            "ingredient": 798,
+            "amount": 500
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 35,
+        "fields": {
+            "recipe": 6,
+            "ingredient": 1441,
+            "amount": 500
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 36,
+        "fields": {
+            "recipe": 6,
+            "ingredient": 886,
+            "amount": 200
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 37,
+        "fields": {
+            "recipe": 6,
+            "ingredient": 2057,
+            "amount": 10
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 38,
+        "fields": {
+            "recipe": 6,
+            "ingredient": 1263,
+            "amount": 20
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 39,
+        "fields": {
+            "recipe": 6,
+            "ingredient": 440,
+            "amount": 10
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 40,
+        "fields": {
+            "recipe": 6,
+            "ingredient": 1685,
+            "amount": 10
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 41,
+        "fields": {
+            "recipe": 6,
+            "ingredient": 1335,
+            "amount": 250
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 42,
+        "fields": {
+            "recipe": 7,
+            "ingredient": 1036,
+            "amount": 350
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 43,
+        "fields": {
+            "recipe": 7,
+            "ingredient": 498,
+            "amount": 35
+        }
+    },
+    {
+        "model": "recipes.subscribe",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "author": 1,
+            "created": "2023-03-05T11:19:19.034Z"
+        }
+    },
+    {
+        "model": "recipes.subscribe",
+        "pk": 6,
+        "fields": {
+            "user": 1,
+            "author": 3,
+            "created": "2023-03-05T12:17:18.111Z"
+        }
+    },
+    {
+        "model": "recipes.favoriterecipe",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "recipe": [
+                7,
+                4,
+                3,
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.favoriterecipe",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "recipe": []
+        }
+    },
+    {
+        "model": "recipes.favoriterecipe",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "recipe": [
+                4,
+                2,
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.shoppingcart",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "recipe": [
+                7,
+                4,
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.shoppingcart",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "recipe": []
+        }
+    },
+    {
+        "model": "recipes.shoppingcart",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "recipe": []
+        }
+    }
+]
