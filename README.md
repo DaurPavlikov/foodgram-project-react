@@ -1,14 +1,13 @@
 # Дипломный проект Foodgram
 ## Backend-разработка, сборка docker-контейнеров и развёртывание на удалённом сервере с применением GitHub Actions и DockerHub
-![Workflow Status](https://github.com/Koloyojik/ foodgram-project-react/actions/workflows/yamdb_workflow.yml/badge.svg?branch=master&event=push)
+![Workflow Status](https://github.com/Koloyojik/foodgram-project-react/actions/workflows/yamdb_workflow.yml/badge.svg?branch=master&event=push)
 
 **Примеры работы на сервере:**
 - [**Главная страница**](http://158.160.17.231/)
 - [**Раздел Django Admin на сервере**](http://158.160.17.231/admin/)
-- [**Пример endpoints для API на сервере**](http://158.160.17.231/api/)
-- [**ReDoc на сервере**](http://158.160.17.231/api/docs/)
+- [**Документация к API на сервере**](http://158.160.17.231/api/docs/)
 
-Для входа в админку:
+Для входа в раздел администратора:
 ```bash
 login: admin@admin.ru
 password: admin 
@@ -16,14 +15,16 @@ password: admin
 
 **Описание**
 
-Проект Foodgram является сервисом по размещению кулинарных рецептов и сбору отзывов пользователей на них.
+Проект Foodgram является сервисом по размещению кулинарных рецептов с их фотографиями.
 Этот репозиторий посвящён развёртыванию этого проекта на сервере при помощи GitHub Actions и DockerHub.
+Во время разработки проекта, после изучения предоставленной документации было решено разбить проект на 3 приложения *api*, *recipes* и *users*, при этом основную логику работы проекта было решено вынести в отдельную поддиректорию, чтобы в будущем при расширении функционала API не ломать обратную совместимость и разрабатывать новые модули внутри другого подкаталога.
+Все рецепты сортируются согласно указанным при их создании тегам. Авторизованные пользователи могут подписываться на понравившихся авторов, добавлять рецепты в избранное, в список покупок, а затем скачивать список покупок в формате .pdf. Неавторизованным пользователям доступна страница регистрации, авторизации, а так же просмотр рецептов других пользователей. Раздел админа настроен, в него выведены все существующие модели и созданы необходимые параметры для сортировки и группировки.
 
 **Версии:**
 - [Python 3.7.16](https://www.python.org/doc/) 
 - [Django 3.2.18](https://docs.djangoproject.com/en/4.1/releases/3.2.18/)
 - [Django REST framework 3.14](https://www.django-rest-framework.org/)
-- [DRF Simple JWT 4.8](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/)
+- [Djoser 2.1](https://djoser.readthedocs.io/en/latest/introduction.html)
 - [Django Filter 22.1](https://django-filter.readthedocs.io/en/main/)
 - [Docker 23.0](https://docs.docker.com/)
 - [Docker Compose 1.29.2](https://docs.docker.com/compose/gettingstarted/)

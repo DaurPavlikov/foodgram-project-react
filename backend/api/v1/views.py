@@ -5,6 +5,7 @@ from django.db.models.expressions import Exists, OuterRef, Value
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
+from django_filters import rest_framework
 from rest_framework import generics, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -184,6 +185,8 @@ class UsersViewSet(UserViewSet):
 class RecipesViewSet(viewsets.ModelViewSet):
     """Вьюсет для рецептов."""
 
+    filter_backends = (rest_framework.DjangoFilterBackend,)
+    filterset_class = RecipeFilter
     queryset = Recipe.objects.all()
     filterset_class = RecipeFilter
     permission_classes = (IsAuthenticatedOrReadOnly,)
