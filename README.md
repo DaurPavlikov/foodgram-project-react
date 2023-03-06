@@ -1,6 +1,6 @@
 # Дипломный проект Foodgram
 ## Backend-разработка, сборка docker-контейнеров и развёртывание на удалённом сервере с применением GitHub Actions и DockerHub
-![Workflow Status](https://github.com/Koloyojik/foodgram-project-react/actions/workflows/yamdb_workflow.yml/badge.svg?branch=master&event=push)
+![Workflow Status](https://github.com/Koloyojik/foodgram-project-react/actions/workflows/workflow.yml/badge.svg?branch=master&event=push)
 
 **Примеры работы на сервере:**
 - [**Главная страница**](http://158.160.17.231/)

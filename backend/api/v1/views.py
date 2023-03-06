@@ -188,7 +188,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
     filter_backends = (rest_framework.DjangoFilterBackend,)
     filterset_class = RecipeFilter
     queryset = Recipe.objects.all()
-    filterset_class = RecipeFilter
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_serializer_class(self):
