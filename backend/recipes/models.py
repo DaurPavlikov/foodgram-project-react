@@ -68,7 +68,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
-        related_name='ingredients'
+        related_name='recipes'
     )
     tags = models.ManyToManyField(
         Tag,
@@ -106,7 +106,7 @@ class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(
         'Ingredient',
         on_delete=models.CASCADE,
-        related_name='ingredients'
+        related_name='recipes'
     )
     amount = models.PositiveSmallIntegerField(
         default=MIN_INGREDIENT_AMT,
