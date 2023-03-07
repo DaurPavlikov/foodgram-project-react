@@ -7,10 +7,19 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from recipes.models import Ingredient, Recipe, RecipeIngredient, Subscribe, Tag
-from .mixins import GetIsSubscribedMixin
 
 User = get_user_model()
 AUTH_ERROR = 'Не удается войти в систему с предоставленными учетными данными.'
+
+
+class GetIsSubscribedMixin:
+    """Миксина для проверки подписки пользователя."""
+
+    def get_is_subscribed(self, obj):
+        user = self.context['request'].user
+        if not user.is_authenticated:
+            return False
+        return user.follower.filter(author=obj).exists()
 
 
 class TokenSerializer(serializers.Serializer):
@@ -134,9 +143,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 
 class RecipeUserSerializer(
         GetIsSubscribedMixin,
-        serializers.ModelSerializer
-):
-
+        serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField(
         read_only=True
     )
