@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
-from .models import RecipesRelatedManager
+from .managers import RecipesRelatedManager
 
 MIN_COOKING_TIME = 1
 MIN_INGREDIENT_AMT = 1
