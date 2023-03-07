@@ -14,7 +14,10 @@ class Command(BaseCommand):
         path = Path(settings.BASE_DIR, 'data', 'ingredients.csv').resolve()
         with open(path, mode="r", encoding="utf-8") as file:
             reader = csv.reader(file)
-            Ingredient.objects.bulk_create(
-                Ingredient(**data) for data in reader
-            )
+            for row in reader:
+                db = Ingredient(
+                    name=row[0],
+                    measurement_unit=row[1],
+                )
+                db.save()
         self.stdout.write(self.style.SUCCESS('Ингредиенты успешно загружены.'))
