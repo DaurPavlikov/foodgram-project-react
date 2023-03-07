@@ -175,7 +175,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return Recipe.recipes_related().annotate(
+            return Recipe.recipes_relation().annotate(
                 is_favorited=Exists(
                     FavoriteRecipe.objects.filter(
                         user=self.request.user, recipe=OuterRef('id'))),
@@ -184,7 +184,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                         user=self.request.user,
                         recipe=OuterRef('id')))
             )
-        return Recipe.recipes_related.annotate(
+        return Recipe.recipes_relation.annotate(
             is_in_shopping_cart=Value(False),
             is_favorited=Value(False),
         )

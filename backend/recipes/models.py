@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
-from .managers import RecipesRelatedManager
+from .managers import RecipesRelationManager
 
 MIN_COOKING_TIME = 1
 MIN_INGREDIENT_AMT = 1
@@ -83,7 +83,8 @@ class Recipe(models.Model):
         ), ]
     )
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
-    recipes_related = RecipesRelatedManager()
+    objects = models.Manager()
+    recipes_relation = RecipesRelationManager()
 
     class Meta:
         verbose_name = 'Рецепт'
