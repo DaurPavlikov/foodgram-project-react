@@ -1,5 +1,5 @@
 import csv
-import os
+from pathlib import Path
 
 from django.conf import settings
 from django.core.management import BaseCommand
@@ -11,14 +11,10 @@ class Command(BaseCommand):
     help = 'Импорт данных из csv файла'
 
     def handle(self, *args, **kwargs):
-        path = os.path.join(settings.BASE_DIR, 'data/')
-        os.chdir(path)
-        with open('ingredients.csv', mode="r", encoding="utf-8") as file:
+        path = Path(settings.BASE_DIR, 'data', 'ingredients.csv').resolve()
+        with open(path, mode="r", encoding="utf-8") as file:
             reader = csv.reader(file)
-            for row in reader:
-                db = Ingredient(
-                    name=row[0],
-                    measurement_unit=row[1],
-                )
-                db.save()
+            Ingredient.objects.bulk_create(
+                Ingredient(**data) for data in reader
+            )
         self.stdout.write(self.style.SUCCESS('Ингредиенты успешно загружены.'))

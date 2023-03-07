@@ -10,28 +10,28 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os
+from os import getenv
+from pathlib import Path
 
 from dotenv import load_dotenv
-from pathlib import Path
 
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-FONT_PATH = os.path.join(BASE_DIR, 'fonts/BalsamiqSans-Regular.ttf')
+FONT_PATH = Path(BASE_DIR, 'fonts', 'BalsamiqSans-Regular.ttf').resolve()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = (
-    os.getenv('SECRET_KEY'),
+    getenv('SECRET_KEY'),
     'django-insecure-r-g3+g^rupfzq)1f9cm4%+=&v64wnw-(_rwio7fmqqsa_d9!ys',
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.getenv('DEBUG', 'False') == 'True')
+DEBUG = (getenv('DEBUG', 'False') == 'True')
 
 ALLOWED_HOSTS = [
     '158.160.17.231',
@@ -97,12 +97,12 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
-        'NAME': os.getenv('DB_NAME', default='postgres'),
-        'USER': os.getenv('POSTGRES_USER', default='postgres'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
-        'HOST': os.getenv('DB_HOST', default='db'),
-        'PORT': os.getenv('DB_PORT', default=5432)
+        'ENGINE': getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': getenv('DB_NAME', default='postgres'),
+        'USER': getenv('POSTGRES_USER', default='postgres'),
+        'PASSWORD': getenv('POSTGRES_PASSWORD', default='postgres'),
+        'HOST': getenv('DB_HOST', default='db'),
+        'PORT': getenv('DB_PORT', default=5432)
     }
 }
 
@@ -171,9 +171,9 @@ CORS_ALLOWED_ORIGINS = [
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = Path(BASE_DIR, 'static').resolve()
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = Path(BASE_DIR, 'media').resolve()
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -181,5 +181,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+EMAIL_FILE_PATH = Path(BASE_DIR, 'sent_emails').resolve()
 DEFAULT_FROM_EMAIL = 'mail@foodgram.su'

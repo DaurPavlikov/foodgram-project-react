@@ -4,14 +4,10 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
 from drf_base64.fields import Base64ImageField
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
-from recipes.models import (
-    Ingredient,
-    Recipe,
-    RecipeIngredient,
-    Subscribe,
-    Tag,
-)
+from recipes.models import Ingredient, Recipe, RecipeIngredient, Subscribe, Tag
+from .mixins import GetIsSubscribedMixin
 
 User = get_user_model()
 AUTH_ERROR = 'Не удается войти в систему с предоставленными учетными данными.'
@@ -51,18 +47,15 @@ class TokenSerializer(serializers.Serializer):
         return attrs
 
 
-class GetIsSubscribedMixin:
-
-    def get_is_subscribed(self, obj):
-        user = self.context['request'].user
-        if not user.is_authenticated:
-            return False
-        return user.follower.filter(author=obj).exists()
-
-
 class UserListSerializer(
         GetIsSubscribedMixin,
         serializers.ModelSerializer):
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+    username = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
     is_subscribed = serializers.BooleanField(read_only=True)
 
     class Meta:
@@ -75,24 +68,6 @@ class UserListSerializer(
             'last_name',
             'is_subscribed',
         )
-
-
-class UserCreateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = (
-            'id',
-            'email',
-            'username',
-            'first_name',
-            'last_name',
-            'password',
-        )
-
-    def validate_password(self, password):
-        validators.validate_password(password)
-        return password
 
 
 class UserPasswordSerializer(serializers.Serializer):
@@ -202,17 +177,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         read_only_fields = ('author',)
 
     def validate(self, data):
-        ingredients = data['ingredients']
-        ingredient_list = []
-        for items in ingredients:
-            ingredient = get_object_or_404(
-                Ingredient, id=items['id']
-            )
-            if ingredient in ingredient_list:
-                raise serializers.ValidationError(
-                    'Укажите уникальный ингридиент.'
-                )
-            ingredient_list.append(ingredient)
         tags = data['tags']
         if not tags:
             raise serializers.ValidationError(
@@ -242,6 +206,16 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     'Количество ингредиента должно быть больше 1.'
                 )
+        ingredient_list = []
+        for items in ingredients:
+            ingredient = get_object_or_404(
+                Ingredient, id=items['id']
+            )
+            if ingredient in ingredient_list:
+                raise serializers.ValidationError(
+                    'Укажите уникальный ингридиент.'
+                )
+            ingredient_list.append(ingredient)
         return ingredients
 
     def create_ingredients(self, ingredients, recipe):
@@ -277,7 +251,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
 
 
 class RecipeReadSerializer(serializers.ModelSerializer):
-    image = Base64ImageField()
     tags = TagSerializer(many=True, read_only=True)
     author = RecipeUserSerializer(
         read_only=True,
