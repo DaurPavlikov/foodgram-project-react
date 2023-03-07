@@ -8,7 +8,8 @@ class RecipesRelationManager(Manager):
         ).prefetch_related(
             'tags',
             'ingredients',
+            'authors_recipes',
             'recipes',
             'shopping_cart',
-            'favorite_recipe',
+            'favorite_recipes',
         )
