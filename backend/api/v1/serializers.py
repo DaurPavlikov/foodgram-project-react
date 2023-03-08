@@ -4,6 +4,7 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
 from drf_base64.fields import Base64ImageField
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from recipes.models import (
     Ingredient,
@@ -78,6 +79,13 @@ class UserListSerializer(
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
+
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+    username = serializers.CharField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
 
     class Meta:
         model = User

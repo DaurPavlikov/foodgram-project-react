@@ -2,8 +2,10 @@ from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
 from django.db.models.signals import post_save
+from django.db.models import Manager
 from django.dispatch import receiver
 from django.urls import reverse
+
 
 MIN_COOKING_TIME = 1
 MIN_INGREDIENT_AMT = 1
@@ -41,6 +43,21 @@ class Tag(models.Model):
         return reverse('tag', args=[self.slug])
 
 
+class RecipesRelatedManager(Manager):
+    def get_queryset(self, is_in_shopping_cart, is_favorited):
+        return super().get_queryset().annotate(
+            is_in_shopping_cart, is_favorited
+        ).select_related(
+            'author'
+        ).prefetch_related(
+            'tags',
+            'ingredients',
+            'recipe',
+            'shopping_cart',
+            'favorite_recipe',
+        )
+
+
 class Recipe(models.Model):
     author = models.ForeignKey(
         User,
@@ -74,6 +91,8 @@ class Recipe(models.Model):
         ), ]
     )
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
+    objects = models.Manager()
+    recipes_related = RecipesRelatedManager()
 
     class Meta:
         verbose_name = 'Рецепт'
