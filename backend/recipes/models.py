@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
 from django.db.models.signals import post_save
-from django.db.models import Manager
 from django.dispatch import receiver
 from django.urls import reverse
 
@@ -43,7 +42,7 @@ class Tag(models.Model):
         return reverse('tag', args=[self.slug])
 
 
-class RecipesRelatedManager(Manager):
+class RecipesRelatedManager(models.Manager):
     def get_queryset(self, is_in_shopping_cart, is_favorited):
         return super().get_queryset().annotate(
             is_in_shopping_cart, is_favorited

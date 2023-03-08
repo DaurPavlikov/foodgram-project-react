@@ -205,10 +205,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 Exists(FavoriteRecipe.objects.filter(
                     user=self.request.user, recipe=OuterRef('id'))
                 )
-            ).all()
-        return Recipe.recipes_related.annotate(
-            Value(False), Value(False)
-        ).all()
+            )
+        return Recipe.recipes_related.annotate(Value(False), Value(False))
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
