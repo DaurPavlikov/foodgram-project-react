@@ -125,7 +125,7 @@ class RecipeIngredient(models.Model):
         ordering = ['-id']
         constraints = [
             models.UniqueConstraint(
-                fields=['foreign_recipes', 'foreign_ingredients'],
+                fields=['recipe', 'ingredient'],
                 name='unique ingredient',
             )
         ]
