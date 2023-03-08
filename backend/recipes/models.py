@@ -53,7 +53,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='recipes',
+        related_name='foreign_recipes',
         verbose_name='Автор'
     )
     name = models.CharField('Название рецепта', max_length=255)
@@ -73,7 +73,7 @@ class Recipe(models.Model):
     tags = models.ManyToManyField(
         Tag,
         verbose_name='Тэги',
-        related_name='tags'
+        related_name='recipes'
     )
     cooking_time = models.PositiveSmallIntegerField(
         verbose_name='Время приготовления в минутах',
@@ -101,12 +101,12 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='recipe'
+        related_name='foreign_recipes'
     )
     ingredient = models.ForeignKey(
         'Ingredient',
         on_delete=models.CASCADE,
-        related_name='ingredient'
+        related_name='foreign_ingredients'
     )
     amount = models.PositiveSmallIntegerField(
         default=MIN_INGREDIENT_AMT,
@@ -125,7 +125,7 @@ class RecipeIngredient(models.Model):
         ordering = ['-id']
         constraints = [
             models.UniqueConstraint(
-                fields=['recipe', 'ingredient'],
+                fields=['foreign_recipes', 'foreign_ingredients'],
                 name='unique ingredient',
             )
         ]
