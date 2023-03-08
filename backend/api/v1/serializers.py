@@ -43,7 +43,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
-    username = serializers.EmailField(
+    username = serializers.CharField(
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
 

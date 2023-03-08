@@ -8,7 +8,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         data = [
-            {'id': 3, 'name': 'Пустота', 'color': '#FFFFFF', 'slug': 'all_empty'},
             {'id': 2, 'name': 'Завтрак', 'color': '#E26C2D', 'slug': 'breakfast'},
             {'id': 1, 'name': 'Обед', 'color': '#49B64E', 'slug': 'dinner'},
             {'id': 0, 'name': 'Ужин', 'color': '#8775D2', 'slug': 'supper'}]
