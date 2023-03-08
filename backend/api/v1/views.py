@@ -189,11 +189,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
             ).select_related(
                 'author'
             ).prefetch_related(
-                'tags',
-                'foreign_ingredients',
-                'foreign_recipes',
-                'shopping_cart',
-                'favorite_recipes',
+                'tags', 'ingredients', 'recipe',
+                'shopping_cart', 'favorite_recipe'
             )
         return Recipe.objects.annotate(
             is_in_shopping_cart=Value(False),
@@ -201,11 +198,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
         ).select_related(
             'author'
         ).prefetch_related(
-            'tags',
-            'foreign_ingredients',
-            'foreign_recipes',
-            'shopping_cart',
-            'favorite_recipes',
+            'tags', 'ingredients', 'recipe',
+            'shopping_cart', 'favorite_recipe'
         )
 
     def perform_create(self, serializer):

@@ -53,7 +53,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='foreign_recipes',
+        related_name='recipe',
         verbose_name='Автор'
     )
     name = models.CharField('Название рецепта', max_length=255)
@@ -68,7 +68,6 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
-        related_name='ingredients',
     )
     tags = models.ManyToManyField(
         Tag,
@@ -101,12 +100,12 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='foreign_recipes'
+        related_name='recipe'
     )
     ingredient = models.ForeignKey(
         'Ingredient',
         on_delete=models.CASCADE,
-        related_name='foreign_ingredients'
+        related_name='ingredient'
     )
     amount = models.PositiveSmallIntegerField(
         default=MIN_INGREDIENT_AMT,
