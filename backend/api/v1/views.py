@@ -186,11 +186,27 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     ShoppingCart.objects.filter(
                         user=self.request.user,
                         recipe=OuterRef('id')))
-            ).get_relations()
+            ).select_related(
+                'author'
+            ).prefetch_related(
+                'tags',
+                'foreign_ingredients',
+                'foreign_recipes',
+                'shopping_cart',
+                'favorite_recipes',
+            )
         return Recipe.objects.annotate(
             is_in_shopping_cart=Value(False),
             is_favorited=Value(False),
-        ).get_relations()
+        ).select_related(
+            'author'
+        ).prefetch_related(
+            'tags',
+            'foreign_ingredients',
+            'foreign_recipes',
+            'shopping_cart',
+            'favorite_recipes',
+        )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
