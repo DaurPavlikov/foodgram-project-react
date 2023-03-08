@@ -5,8 +5,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
-# from .managers import RecipesRelationManager
-
 MIN_COOKING_TIME = 1
 MIN_INGREDIENT_AMT = 1
 
@@ -14,8 +12,6 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
-    """Модель Ингредиента. Содержит название и единицу измерения."""
-
     name = models.CharField('Название ингредиента', max_length=255)
     measurement_unit = models.CharField('Единица измерения', max_length=64)
 
@@ -29,8 +25,6 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
-    """Модель Тэга. Применяется для сортировки выдачи рецептов."""
-
     name = models.CharField('Название', max_length=64, unique=True)
     color = models.CharField('Цвет в HEX', max_length=7, unique=True)
     slug = models.SlugField('Ссылка', max_length=127, unique=True)
@@ -48,8 +42,6 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
-    """Модель Рецепта. Комплексная модель включающая в себя все данные."""
-
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -59,7 +51,7 @@ class Recipe(models.Model):
     name = models.CharField('Название рецепта', max_length=255)
     image = models.ImageField(
         'Фото рецепта',
-        upload_to='media/recipes_images/',
+        upload_to='static/recipe/',
         blank=True,
         null=True
     )
@@ -67,7 +59,7 @@ class Recipe(models.Model):
     cooking_time = models.BigIntegerField('Время приготовления рецепта')
     ingredients = models.ManyToManyField(
         Ingredient,
-        through='RecipeIngredient',
+        through='RecipeIngredient'
     )
     tags = models.ManyToManyField(
         Tag,
@@ -82,8 +74,6 @@ class Recipe(models.Model):
         ), ]
     )
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
-    # objects = models.Manager()
-    # recipes_relation = RecipesRelationManager()
 
     class Meta:
         verbose_name = 'Рецепт'
@@ -95,8 +85,6 @@ class Recipe(models.Model):
 
 
 class RecipeIngredient(models.Model):
-    """Модель для связи модели Ингридиента с моделью Рецепта."""
-
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
@@ -131,8 +119,6 @@ class RecipeIngredient(models.Model):
 
 
 class Subscribe(models.Model):
-    """Модель для связи подписчика с автором."""
-
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -163,18 +149,16 @@ class Subscribe(models.Model):
 
 
 class FavoriteRecipe(models.Model):
-    """Модель для связи модели Пользователя с его избранными рецептами."""
-
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         null=True,
-        related_name='favorite_recipes',
+        related_name='favorite_recipe',
         verbose_name='Пользователь',
     )
     recipe = models.ManyToManyField(
         Recipe,
-        related_name='favorite_recipes',
+        related_name='favorite_recipe',
         verbose_name='Избранный рецепт',
     )
 
@@ -193,8 +177,6 @@ class FavoriteRecipe(models.Model):
 
 
 class ShoppingCart(models.Model):
-    """Модель для связи модели Пользователя с его корзиной покупок."""
-
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,

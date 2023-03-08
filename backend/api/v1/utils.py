@@ -1,4 +1,4 @@
-from io import BytesIO
+import io
 
 from django.conf import settings
 from reportlab.pdfbase import pdfmetrics
@@ -12,7 +12,7 @@ EMPTY_LIST_SIZE = 18
 
 
 def pdf_create(data):
-    buffer = BytesIO()
+    buffer = io.BytesIO()
     page = canvas.Canvas(buffer)
     pdfmetrics.registerFont(TTFont('Font', settings.FONT_PATH))
     cursor_x, cursor_y = X_LIMITER, Y_LIMITER

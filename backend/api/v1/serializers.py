@@ -4,23 +4,31 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
 from drf_base64.fields import Base64ImageField
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
-from recipes.models import Ingredient, Recipe, RecipeIngredient, Subscribe, Tag
+from recipes.models import (
+    Ingredient,
+    Recipe,
+    RecipeIngredient,
+    Subscribe,
+    Tag,
+)
 
 User = get_user_model()
 AUTH_ERROR = 'Не удается войти в систему с предоставленными учетными данными.'
 
 
 class TokenSerializer(serializers.Serializer):
-    email = serializers.CharField(label='Email', write_only=True)
+    email = serializers.CharField(
+        label='Email',
+        write_only=True)
     password = serializers.CharField(
         label='Пароль',
         style={'input_type': 'password'},
         trim_whitespace=False,
-        write_only=True
-    )
-    token = serializers.CharField(label='Токен', read_only=True)
+        write_only=True)
+    token = serializers.CharField(
+        label='Токен',
+        read_only=True)
 
     def validate(self, attrs):
         email = attrs.get('email')
@@ -29,25 +37,21 @@ class TokenSerializer(serializers.Serializer):
             user = authenticate(
                 request=self.context.get('request'),
                 email=email,
-                password=password
-            )
+                password=password)
             if not user:
                 raise serializers.ValidationError(
                     AUTH_ERROR,
-                    code='authorization'
-                )
+                    code='authorization')
         else:
             msg = 'Необходимо указать "адрес электронной почты" и "пароль".'
             raise serializers.ValidationError(
                 msg,
-                code='authorization'
-            )
+                code='authorization')
         attrs['user'] = user
         return attrs
 
 
 class GetIsSubscribedMixin:
-    """Миксина для проверки подписки пользователя."""
 
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
@@ -74,12 +78,6 @@ class UserListSerializer(
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
-    username = serializers.CharField(
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
 
     class Meta:
         model = User
@@ -161,7 +159,9 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 
 class RecipeUserSerializer(
         GetIsSubscribedMixin,
-        serializers.ModelSerializer):
+        serializers.ModelSerializer
+):
+
     is_subscribed = serializers.SerializerMethodField(
         read_only=True
     )
@@ -202,6 +202,17 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         read_only_fields = ('author',)
 
     def validate(self, data):
+        ingredients = data['ingredients']
+        ingredient_list = []
+        for items in ingredients:
+            ingredient = get_object_or_404(
+                Ingredient, id=items['id']
+            )
+            if ingredient in ingredient_list:
+                raise serializers.ValidationError(
+                    'Укажите уникальный ингридиент.'
+                )
+            ingredient_list.append(ingredient)
         tags = data['tags']
         if not tags:
             raise serializers.ValidationError(
@@ -231,16 +242,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     'Количество ингредиента должно быть больше 1.'
                 )
-        ingredient_list = []
-        for items in ingredients:
-            ingredient = get_object_or_404(
-                Ingredient, id=items['id']
-            )
-            if ingredient in ingredient_list:
-                raise serializers.ValidationError(
-                    'Укажите уникальный ингридиент.'
-                )
-            ingredient_list.append(ingredient)
         return ingredients
 
     def create_ingredients(self, ingredients, recipe):

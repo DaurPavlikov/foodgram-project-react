@@ -4,26 +4,43 @@ from django.db.models.aggregates import Count, Sum
 from django.db.models.expressions import Exists, OuterRef, Value
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
-from django_filters import rest_framework
 from djoser.views import UserViewSet
+from django_filters import rest_framework
 from rest_framework import generics, status, viewsets
+from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.decorators import action, api_view
-from rest_framework.permissions import (SAFE_METHODS, AllowAny,
-                                        IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
-from rest_framework.response import Response
+from rest_framework.permissions import (
+    SAFE_METHODS,
+    AllowAny,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly
+)
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
 
-from recipes.models import (FavoriteRecipe, Ingredient, Recipe, ShoppingCart,
-                            Subscribe, Tag)
+from recipes.models import (
+    FavoriteRecipe,
+    Ingredient,
+    Recipe,
+    ShoppingCart,
+    Subscribe,
+    Tag,
+)
+
 from .filters import IngredientsFilter, RecipeFilter
 from .mixins import GetObjectMixin
-from .serializers import (IngredientSerializer, RecipeReadSerializer,
-                          RecipeWriteSerializer, SubscribeSerializer,
-                          TagSerializer, TokenSerializer, UserCreateSerializer,
-                          UserListSerializer, UserPasswordSerializer)
+from .serializers import (
+    IngredientSerializer,
+    RecipeReadSerializer,
+    RecipeWriteSerializer,
+    SubscribeSerializer,
+    TagSerializer,
+    TokenSerializer,
+    UserCreateSerializer,
+    UserListSerializer,
+    UserPasswordSerializer,
+)
 from .utils import pdf_create
 
 FILENAME = 'shoppingcart.pdf'
@@ -43,9 +60,9 @@ class AddAndDeleteSubscribe(
         return self.request.user.follower.select_related(
             'following'
         ).prefetch_related(
-            'following__recipes'
+            'following__recipe'
         ).annotate(
-            recipes_count=Count('following__recipes'),
+            recipes_count=Count('following__recipe'),
             is_subscribed=Value(True),
         )
 
@@ -109,8 +126,8 @@ class AddDeleteShoppingCart(
         self.request.user.shopping_cart.recipe.remove(instance)
 
 
-class CreateToken(ObtainAuthToken):
-    """Получение токена для пользователя."""
+class AuthToken(ObtainAuthToken):
+    """Авторизация пользователя."""
 
     serializer_class = TokenSerializer
     permission_classes = (AllowAny,)
@@ -122,12 +139,14 @@ class CreateToken(ObtainAuthToken):
         token, created = Token.objects.get_or_create(user=user)
         return Response(
             {'auth_token': token.key},
-            status=status.HTTP_201_CREATED)
+            status=status.HTTP_201_CREATED
+        )
 
 
 class UsersViewSet(UserViewSet):
     """Вьюсет для работы с моделью пользователя."""
 
+    serializer_class = UserListSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
@@ -177,29 +196,29 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return RecipeWriteSerializer
 
     def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return Recipe.objects.annotate(
-                is_favorited=Exists(
-                    FavoriteRecipe.objects.filter(
-                        user=self.request.user, recipe=OuterRef('id'))),
-                is_in_shopping_cart=Exists(
-                    ShoppingCart.objects.filter(
-                        user=self.request.user,
-                        recipe=OuterRef('id')))
-            ).select_related(
-                'author'
-            ).prefetch_related(
-                'tags', 'ingredients', 'recipe',
-                'shopping_cart', 'favorite_recipe'
-            )
         return Recipe.objects.annotate(
+            is_favorited=Exists(
+                FavoriteRecipe.objects.filter(
+                    user=self.request.user, recipe=OuterRef('id'))),
+            is_in_shopping_cart=Exists(
+                ShoppingCart.objects.filter(
+                    user=self.request.user,
+                    recipe=OuterRef('id')))
+        ).select_related('author').prefetch_related(
+            'tags',
+            'ingredients',
+            'recipe',
+            'shopping_cart',
+            'favorite_recipe',
+        ) if self.request.user.is_authenticated else Recipe.objects.annotate(
             is_in_shopping_cart=Value(False),
             is_favorited=Value(False),
-        ).select_related(
-            'author'
-        ).prefetch_related(
-            'tags', 'ingredients', 'recipe',
-            'shopping_cart', 'favorite_recipe'
+        ).select_related('author').prefetch_related(
+            'tags',
+            'ingredients',
+            'recipe',
+            'shopping_cart',
+            'favorite_recipe',
         )
 
     def perform_create(self, serializer):
@@ -212,7 +231,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
         """Создание списка с ингредиентами в pdf-файле."""
 
         shopping_cart = (
-            request.user.shopping_cart.recipe.values(
+            request.user.shopping_cart.recipe.
+            values(
                 'ingredients__name',
                 'ingredients__measurement_unit'
             ).annotate(amount=Sum('recipe__amount')).order_by()

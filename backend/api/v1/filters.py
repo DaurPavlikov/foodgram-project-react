@@ -1,8 +1,8 @@
 import django_filters as filters
 from rest_framework.filters import SearchFilter
 
-from recipes.models import Ingredient, Recipe
 from users.models import User
+from recipes.models import Recipe, Ingredient
 
 
 class IngredientsFilter(SearchFilter):
