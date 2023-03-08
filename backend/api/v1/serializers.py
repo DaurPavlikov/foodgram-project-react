@@ -25,12 +25,6 @@ class GetIsSubscribedMixin:
 class UserListSerializer(
         GetIsSubscribedMixin,
         serializers.ModelSerializer):
-    email = serializers.EmailField(
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
-    username = serializers.EmailField(
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
     is_subscribed = serializers.BooleanField(read_only=True)
 
     class Meta:
@@ -42,8 +36,31 @@ class UserListSerializer(
             'first_name',
             'last_name',
             'is_subscribed',
+        )
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+    username = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'email',
+            'username',
+            'first_name',
+            'last_name',
             'password',
         )
+
+    def validate_password(self, password):
+        validators.validate_password(password)
+        return password
 
 
 class UserPasswordSerializer(serializers.Serializer):

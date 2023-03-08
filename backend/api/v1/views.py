@@ -24,8 +24,8 @@ from .filters import IngredientsFilter, RecipeFilter
 from .mixins import GetObjectMixin
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, SubscribeSerializer,
-                          TagSerializer, UserListSerializer,
-                          UserPasswordSerializer)
+                          TagSerializer, UserCreateSerializer,
+                          UserListSerializer, UserPasswordSerializer)
 from .utils import pdf_create
 
 FILENAME = 'shoppingcart.pdf'
@@ -128,7 +128,6 @@ class CreateToken(ObtainAuthToken):
 class UsersViewSet(UserViewSet):
     """Вьюсет для работы с моделью пользователя."""
 
-    serializer_class = UserListSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
@@ -141,6 +140,11 @@ class UsersViewSet(UserViewSet):
         ) if self.request.user.is_authenticated else User.objects.annotate(
             is_subscribed=Value(False)
         )
+
+    def get_serializer_class(self):
+        if self.request.method.lower() == 'post':
+            return UserCreateSerializer
+        return UserListSerializer
 
     def perform_create(self, serializer):
         password = make_password(self.request.data['password'])
