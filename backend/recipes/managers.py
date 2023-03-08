@@ -2,8 +2,8 @@ from django.db.models import Manager
 
 
 class RecipesRelationManager(Manager):
-    def get_queryset(self):
-        return super().get_queryset().select_related(
+    def get_relations(self):
+        return super().select_related(
             'author'
         ).prefetch_related(
             'tags',
