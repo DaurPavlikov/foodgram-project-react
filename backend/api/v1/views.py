@@ -5,9 +5,7 @@ from django.db.models.expressions import Exists, OuterRef, Value
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework
-from djoser import utils
 from djoser.views import UserViewSet
-from djoser.conf import settings
 from rest_framework import generics, status, viewsets
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.decorators import action, api_view
@@ -16,7 +14,7 @@ from rest_framework.permissions import (SAFE_METHODS, AllowAny,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.status import HTTP_201_CREATED
+from rest_framework.authtoken.models import Token
 
 from recipes.models import (FavoriteRecipe, Ingredient, Recipe, ShoppingCart,
                             Subscribe, Tag)
@@ -24,7 +22,7 @@ from .filters import IngredientsFilter, RecipeFilter
 from .mixins import GetObjectMixin
 from .serializers import (IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, SubscribeSerializer,
-                          TagSerializer, UserCreateSerializer,
+                          TagSerializer, TokenSerializer, UserCreateSerializer,
                           UserListSerializer, UserPasswordSerializer)
 from .utils import pdf_create
 
@@ -114,15 +112,17 @@ class AddDeleteShoppingCart(
 class CreateToken(ObtainAuthToken):
     """Получение токена для пользователя."""
 
-    serializer_class = settings.SERIALIZERS.token_create
-    permission_classes = settings.PERMISSIONS.token_create
+    serializer_class = TokenSerializer
+    permission_classes = (AllowAny,)
 
-    def _action(self, serializer):
-        token = utils.login_user(request=self.request, user=serializer.user)
-        token_serializer_class = settings.SERIALIZERS.token
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
         return Response(
-            data=token_serializer_class(token).data, status=HTTP_201_CREATED
-        )
+            {'auth_token': token.key},
+            status=status.HTTP_201_CREATED)
 
 
 class UsersViewSet(UserViewSet):
