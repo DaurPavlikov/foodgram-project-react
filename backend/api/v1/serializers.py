@@ -276,7 +276,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
 
 
 class RecipeReadSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField()
     tags = TagSerializer(many=True, read_only=True)
     author = RecipeUserSerializer(
         read_only=True,
