@@ -43,10 +43,8 @@ class Tag(models.Model):
 
 
 class RecipesRelatedManager(models.Manager):
-    def get_queryset(self, is_in_shopping_cart, is_favorited):
-        return super().get_queryset().annotate(
-            is_in_shopping_cart, is_favorited
-        ).select_related(
+    def get_queryset(self):
+        return super().get_queryset().select_related(
             'author'
         ).prefetch_related(
             'tags',

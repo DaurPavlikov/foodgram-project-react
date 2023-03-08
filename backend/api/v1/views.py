@@ -197,16 +197,18 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return Recipe.recipes_related(
-                Exists(ShoppingCart.objects.filter(
+            return Recipe.recipes_related.annotate(
+                is_in_shopping_cart=Exists(ShoppingCart.objects.filter(
                     user=self.request.user,
                     recipe=OuterRef('id'))
                 ),
-                Exists(FavoriteRecipe.objects.filter(
+                is_favorited=Exists(FavoriteRecipe.objects.filter(
                     user=self.request.user, recipe=OuterRef('id'))
                 )
             )
-        return Recipe.recipes_related(Value(False), Value(False))
+        return Recipe.recipes_related.annotate(
+            is_in_shopping_cart=Value(False), is_favorited=Value(False)
+        )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
