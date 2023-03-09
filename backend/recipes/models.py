@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
+from .managers import RecipesRelatedManager
 
 MIN_COOKING_TIME = 1
 MIN_INGREDIENT_AMT = 1
@@ -40,19 +41,6 @@ class Tag(models.Model):
 
     def get_absolute_url(self):
         return reverse('tag', args=[self.slug])
-
-
-class RecipesRelatedManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().select_related(
-            'author'
-        ).prefetch_related(
-            'tags',
-            'ingredients',
-            'foreign_recipes',
-            'shopping_cart',
-            'favorite_recipe',
-        )
 
 
 class Recipe(models.Model):
