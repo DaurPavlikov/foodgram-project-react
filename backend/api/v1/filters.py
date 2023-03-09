@@ -2,7 +2,7 @@ import django_filters as filters
 from rest_framework.filters import SearchFilter
 
 from users.models import User
-from recipes.models import Recipe, Ingredient
+from recipes.models import Recipe, Ingredient, Tag
 
 
 class IngredientsFilter(SearchFilter):
@@ -23,9 +23,11 @@ class RecipeFilter(filters.FilterSet):
         widget=filters.widgets.BooleanWidget(),
         label='В избранных.'
     )
-    tags = filters.AllValuesMultipleFilter(
+    tags = filters.ModelMultipleChoiceFilter(
+        queryset=Tag.objects.all(),
         field_name='tags__slug',
-        label='Ссылка'
+        to_field_name='slug',
+        label='Ссылка',
     )
 
     class Meta:
