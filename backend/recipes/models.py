@@ -49,7 +49,6 @@ class RecipesRelatedManager(models.Manager):
         ).prefetch_related(
             'tags',
             'ingredients',
-            'recipes',
             'foreign_recipes',
             'many_ingredients',
             'shopping_cart',
