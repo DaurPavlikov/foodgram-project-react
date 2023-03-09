@@ -14,7 +14,6 @@ from rest_framework.permissions import (
     SAFE_METHODS,
     AllowAny,
     IsAuthenticated,
-    IsAuthenticatedOrReadOnly
 )
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
@@ -28,6 +27,7 @@ from recipes.models import (
     Tag,
 )
 
+from .permissions import IsAuthorOrAdminOrReadOnly
 from .filters import IngredientsFilter, RecipeFilter
 from .mixins import GetObjectMixin
 from .serializers import (
@@ -188,7 +188,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
     filter_backends = (rest_framework.DjangoFilterBackend,)
     filterset_class = RecipeFilter
     queryset = Recipe.objects.all()
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthorOrAdminOrReadOnly,)
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
