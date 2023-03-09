@@ -186,7 +186,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
     filter_backends = (rest_framework.DjangoFilterBackend,)
     filterset_class = RecipeFilter
-    queryset = Recipe.recipes_related.all()
+    queryset = Recipe.objects.all()
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
