@@ -50,7 +50,6 @@ class RecipesRelatedManager(models.Manager):
             'tags',
             'ingredients',
             'foreign_recipes',
-            'many_ingredients',
             'shopping_cart',
             'favorite_recipe',
         )
