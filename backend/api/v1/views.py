@@ -27,7 +27,6 @@ from recipes.models import (
     Tag,
 )
 
-from .permissions import IsAuthorOrAdminOrReadOnly
 from .filters import IngredientsFilter, RecipeFilter
 from .mixins import GetObjectMixin
 from .serializers import (
@@ -188,7 +187,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
     filter_backends = (rest_framework.DjangoFilterBackend,)
     filterset_class = RecipeFilter
     queryset = Recipe.objects.all()
-    permission_classes = (IsAuthorOrAdminOrReadOnly,)
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -206,8 +204,10 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     user=self.request.user, recipe=OuterRef('id'))
                 )
             )
-        return Recipe.recipes_related.all()
-# is_in_shopping_cart=Value(False), is_favorited=Value(False)
+        return Recipe.recipes_related.annotate(
+            is_in_shopping_cart=Value(False),
+            is_favorited=Value(False)
+        )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
