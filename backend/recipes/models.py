@@ -49,7 +49,7 @@ class RecipesRelatedManager(models.Manager):
         ).prefetch_related(
             'tags',
             'ingredients',
-            'recipe',
+            'recipes',
             'shopping_cart',
             'favorite_recipe',
         )
@@ -59,7 +59,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='recipe',
+        related_name='recipes',
         verbose_name='Автор'
     )
     name = models.CharField('Название рецепта', max_length=255)
@@ -73,12 +73,13 @@ class Recipe(models.Model):
     cooking_time = models.BigIntegerField('Время приготовления рецепта')
     ingredients = models.ManyToManyField(
         Ingredient,
-        through='RecipeIngredient'
+        through='RecipeIngredient',
+        related_name='ingredients'
     )
     tags = models.ManyToManyField(
         Tag,
         verbose_name='Тэги',
-        related_name='recipes'
+        related_name='tags'
     )
     cooking_time = models.PositiveSmallIntegerField(
         verbose_name='Время приготовления в минутах',
@@ -104,12 +105,12 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='recipe'
+        related_name='recipes'
     )
     ingredient = models.ForeignKey(
         'Ingredient',
         on_delete=models.CASCADE,
-        related_name='ingredient'
+        related_name='foreign_ingredients'
     )
     amount = models.PositiveSmallIntegerField(
         default=MIN_INGREDIENT_AMT,
