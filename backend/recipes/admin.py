@@ -53,11 +53,11 @@ class RecipeAdmin(admin.ModelAdmin):
     @admin.display(description=' Ингредиенты ')
     def get_ingredients(self, obj):
         return '\n '.join([
-            f'{item["ingredient__name"]} - {item["amount"]}'
-            f' {item["ingredient__measurement_unit"]}.'
-            for item in obj.recipe.values(
-                'ingredient__name',
-                'amount', 'ingredient__measurement_unit')])
+            f'{item["foreign_ingredients__name"]} - {item["amount"]}'
+            f' {item["foreign_ingredients__measurement_unit"]}.'
+            for item in obj.foreign_recipes.values(
+                'foreign_ingredients__name',
+                'amount', 'foreign_ingredients__measurement_unit')])
 
     @admin.display(description='В избранном')
     def get_favorite_count(self, obj):
