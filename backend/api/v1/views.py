@@ -65,6 +65,22 @@ class AddAndDeleteSubscribe(
             is_subscribed=Value(True),
         )
 
+    def create(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.user.id == instance.id:
+            return Response(
+                {'errors': 'Нельзя подписаться на себя.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if request.user.follower.filter(author=instance).exists():
+            return Response(
+                {'errors': 'Вы уже подписаны на этого пользователя.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        subscribe = request.user.follower.create(author=instance)
+        serializer = self.get_serializer(subscribe)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     def get_object(self):
         user_id = self.kwargs['user_id']
         user = get_object_or_404(User, id=user_id)

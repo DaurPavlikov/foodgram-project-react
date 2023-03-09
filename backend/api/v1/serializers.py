@@ -5,8 +5,6 @@ from django.shortcuts import get_object_or_404
 from drf_base64.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from rest_framework import status
-from rest_framework.response import Response
 
 from recipes.models import (
     Ingredient,
@@ -342,19 +340,3 @@ class SubscribeSerializer(serializers.ModelSerializer):
             else obj.author.recipe.all()
         )
         return SubscribeRecipeSerializer(recipes, many=True).data
-
-    def create(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if request.user.id == instance.id:
-            return Response(
-                {'errors': 'Нельзя подписаться на себя.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if request.user.follower.filter(author=instance).exists():
-            return Response(
-                {'errors': 'Вы уже подписаны на этого пользователя.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        subscribe = request.user.follower.create(author=instance)
-        serializer = self.get_serializer(subscribe)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
