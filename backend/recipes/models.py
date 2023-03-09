@@ -91,8 +91,8 @@ class Recipe(models.Model):
         ), ]
     )
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
-    # objects = models.Manager()
-    # recipes_related = RecipesRelatedManager()
+    objects = models.Manager()
+    recipes_related = RecipesRelatedManager()
 
     class Meta:
         verbose_name = 'Рецепт'
