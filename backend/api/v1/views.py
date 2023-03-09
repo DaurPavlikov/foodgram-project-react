@@ -206,9 +206,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     user=self.request.user, recipe=OuterRef('id'))
                 )
             )
-        return Recipe.recipes_related.annotate(
-            is_in_shopping_cart=Value(False), is_favorited=Value(False)
-        )
+        return Recipe.recipes_related.all()
+# is_in_shopping_cart=Value(False), is_favorited=Value(False)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
