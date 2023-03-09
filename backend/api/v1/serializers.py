@@ -332,7 +332,7 @@ class SubscribeSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         limit = request.GET.get('recipes_limit')
         recipes = (
-            obj.author.recipe.all()[:int(limit)] if limit
-            else obj.author.recipe.all()
+            obj.author.foreign_recipes.all()[:int(limit)] if limit
+            else obj.author.foreign_recipes.all()
         )
         return SubscribeRecipeSerializer(recipes, many=True).data
