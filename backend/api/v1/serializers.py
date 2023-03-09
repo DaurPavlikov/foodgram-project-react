@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404
 from drf_base64.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework import status
+from rest_framework.response import Response
 
 from recipes.models import (
     Ingredient,
@@ -210,17 +212,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         read_only_fields = ('author',)
 
     def validate(self, data):
-        ingredients = data['ingredients']
-        ingredient_list = []
-        for items in ingredients:
-            ingredient = get_object_or_404(
-                Ingredient, id=items['id']
-            )
-            if ingredient in ingredient_list:
-                raise serializers.ValidationError(
-                    'Укажите уникальный ингридиент.'
-                )
-            ingredient_list.append(ingredient)
         tags = data['tags']
         if not tags:
             raise serializers.ValidationError(
@@ -250,6 +241,16 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     'Количество ингредиента должно быть больше 1.'
                 )
+        ingredient_list = []
+        for items in ingredients:
+            ingredient = get_object_or_404(
+                Ingredient, id=items['id']
+            )
+            if ingredient in ingredient_list:
+                raise serializers.ValidationError(
+                    'Укажите уникальный ингридиент.'
+                )
+            ingredient_list.append(ingredient)
         return ingredients
 
     def create_ingredients(self, ingredients, recipe):
@@ -341,3 +342,19 @@ class SubscribeSerializer(serializers.ModelSerializer):
             else obj.author.recipe.all()
         )
         return SubscribeRecipeSerializer(recipes, many=True).data
+
+    def create(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.user.id == instance.id:
+            return Response(
+                {'errors': 'Нельзя подписаться на себя.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if request.user.follower.filter(author=instance).exists():
+            return Response(
+                {'errors': 'Вы уже подписаны на этого пользователя.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        subscribe = request.user.follower.create(author=instance)
+        serializer = self.get_serializer(subscribe)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

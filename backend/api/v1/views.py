@@ -71,22 +71,6 @@ class AddAndDeleteSubscribe(
         self.check_object_permissions(self.request, user)
         return user
 
-    def create(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if request.user.id == instance.id:
-            return Response(
-                {'errors': 'Нельзя подписаться на себя.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if request.user.follower.filter(author=instance).exists():
-            return Response(
-                {'errors': 'Вы уже подписаны на этого пользователя.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        subscribe = request.user.follower.create(author=instance)
-        serializer = self.get_serializer(subscribe)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
     def perform_destroy(self, instance):
         self.request.user.follower.filter(author=instance).delete()
 
@@ -145,7 +129,6 @@ class AuthToken(ObtainAuthToken):
 class UsersViewSet(UserViewSet):
     """Вьюсет для работы с моделью пользователя."""
 
-    serializer_class = UserListSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
