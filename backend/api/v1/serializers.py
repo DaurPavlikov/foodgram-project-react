@@ -98,10 +98,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'password',
         )
 
-    def validate_password(self, password):
-        validators.validate_password(password)
-        return password
-
 
 class UserPasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(
