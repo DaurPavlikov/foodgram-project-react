@@ -222,7 +222,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
             values(
                 'ingredients__name',
                 'ingredients__measurement_unit'
-            ).annotate(amount=Sum('recipe__amount')).order_by()
+            ).annotate(amount=Sum('foreign_recipes__amount')).order_by()
         )
         complete_pdf = pdf_create(shopping_cart)
         return FileResponse(
