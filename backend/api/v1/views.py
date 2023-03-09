@@ -193,6 +193,12 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return RecipeWriteSerializer
 
     def get_queryset(self):
+        tags = self.request.query_params.getlist('tags')
+        if not tags:
+            return Response(
+                'Теги не выбраны.',
+                status=status.HTTP_204_NO_CONTENT
+            )
         if self.request.user.is_authenticated:
             return Recipe.recipes_related.annotate(
                 is_in_shopping_cart=Exists(ShoppingCart.objects.filter(
