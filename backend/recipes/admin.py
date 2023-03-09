@@ -55,7 +55,7 @@ class RecipeAdmin(admin.ModelAdmin):
         return '\n '.join([
             f'{item["foreign_ingredients__name"]} - {item["amount"]}'
             f' {item["foreign_ingredients__measurement_unit"]}.'
-            for item in obj.foreign_recipes.values(
+            for item in obj.recipe.values(
                 'foreign_ingredients__name',
                 'amount', 'foreign_ingredients__measurement_unit')])
 
