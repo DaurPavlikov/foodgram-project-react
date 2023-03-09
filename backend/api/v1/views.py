@@ -196,7 +196,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         tags = self.request.query_params.getlist('tags')
         if not tags:
             return Response(
-                'Теги не выбраны.',
+                {'warning': 'Не указаны тэги.'},
                 status=status.HTTP_204_NO_CONTENT
             )
         if self.request.user.is_authenticated:
