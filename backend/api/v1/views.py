@@ -206,13 +206,13 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     )
                 ).filter(
                     tags__slug__in=tags
-                ).distinct()
+                )
             return Recipe.recipes_related.annotate(
                 is_in_shopping_cart=Value(False),
                 is_favorited=Value(False)
             ).filter(
                 tags__slug__in=tags
-            ).distinct()
+            )
         return Recipe.objects.none()
 
     def perform_create(self, serializer):
