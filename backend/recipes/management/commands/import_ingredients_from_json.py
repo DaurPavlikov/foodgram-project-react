@@ -16,10 +16,10 @@ class Command(BaseCommand):
             reader = csv.reader(file)
             for row in reader:
                 db = Ingredient(
-                    name=row[0],
-                    measurement_unit=row[1],
+                    name=row['name'],
+                    measurement_unit=row['measurement_unit'],
                 )
                 db.save()
         self.stdout.write(self.style.SUCCESS(
-            'Ингредиенты из csv-файла успешно загружены.'
+            'Ингредиенты из json-файла успешно загружены.'
         ))
