@@ -14,6 +14,8 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
+    """Модель ингридиента, для описания названия и его единицы измерения."""
+
     name = models.CharField('Название ингредиента', max_length=255)
     measurement_unit = models.CharField('Единица измерения', max_length=64)
 
@@ -27,6 +29,8 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
+    """Модель тэга, для сортировки рецептов."""
+
     name = models.CharField('Название', max_length=64, unique=True)
     color = models.CharField('Цвет в HEX', max_length=7, unique=True)
     slug = models.SlugField('Ссылка', max_length=127, unique=True)
@@ -44,6 +48,8 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
+    """Модель рецепта. Содержит ссылки на все основные модели проекта."""
+
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -90,6 +96,8 @@ class Recipe(models.Model):
 
 
 class RecipeIngredient(models.Model):
+    """Модель связи рецепта и используемого в нём ингридиента."""
+
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
@@ -124,6 +132,8 @@ class RecipeIngredient(models.Model):
 
 
 class Subscribe(models.Model):
+    """Модель подписки пользователя на автора рецепта."""
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -154,6 +164,8 @@ class Subscribe(models.Model):
 
 
 class FavoriteRecipe(models.Model):
+    """Модель для добавления рецептов в раздел избранного."""
+
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -182,6 +194,8 @@ class FavoriteRecipe(models.Model):
 
 
 class ShoppingCart(models.Model):
+    """Модель для добавления рецептов в список покупок."""
+
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,

@@ -4,6 +4,8 @@ from recipes.models import Tag
 
 
 class Command(BaseCommand):
+    """Команда для генерации списка тэгов."""
+
     help = 'Импорт тегов'
 
     def handle(self, *args, **kwargs):

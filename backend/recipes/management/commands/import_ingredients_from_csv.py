@@ -8,6 +8,8 @@ from recipes.models import Ingredient
 
 
 class Command(BaseCommand):
+    """Команда для импорта списка ингридиентов из csv-файла."""
+
     help = 'Импорт данных из csv файла'
 
     def handle(self, *args, **kwargs):

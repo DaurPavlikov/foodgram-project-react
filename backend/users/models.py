@@ -3,6 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
+    """Переопределение модели пользователя."""
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 

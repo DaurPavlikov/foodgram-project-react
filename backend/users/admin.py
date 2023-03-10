@@ -6,6 +6,8 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    """Модель пользователя для панели администратора."""
+
     list_display = (
         'id',
         'username',

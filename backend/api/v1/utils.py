@@ -12,6 +12,8 @@ EMPTY_LIST_SIZE = 18
 
 
 def pdf_create(data):
+    """Функция для генерации pdf-файла из переданного в неё списка."""
+
     buffer = io.BytesIO()
     page = canvas.Canvas(buffer)
     pdfmetrics.registerFont(TTFont('Font', settings.FONT_PATH))

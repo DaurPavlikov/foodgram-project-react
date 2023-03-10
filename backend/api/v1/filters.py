@@ -6,6 +6,8 @@ from recipes.models import Recipe, Ingredient, Tag
 
 
 class IngredientsFilter(SearchFilter):
+    """Фильтр ингредиентов."""
+
     search_param = 'name'
 
     class Meta:
@@ -14,6 +16,8 @@ class IngredientsFilter(SearchFilter):
 
 
 class RecipeFilter(filters.FilterSet):
+    """Фильтр рецептов."""
+
     author = filters.ModelChoiceFilter(queryset=User.objects.all())
     is_in_shopping_cart = filters.BooleanFilter(
         widget=filters.widgets.BooleanWidget(),
