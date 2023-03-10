@@ -148,15 +148,15 @@ class UsersViewSet(UserViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return User.objects.annotate(
-            is_subscribed=Exists(
-                self.request.user.follower.filter(
-                    author=OuterRef('id'))
-            )).prefetch_related(
-                'follower', 'following'
-        ) if self.request.user.is_authenticated else User.objects.annotate(
-            is_subscribed=Value(False)
-        )
+        if self.request.user.is_authenticated:
+            return User.objects.annotate(
+                is_subscribed=Exists(
+                    self.request.user.follower.filter(
+                        author=OuterRef('id'))
+                )).prefetch_related(
+                    'follower', 'following'
+            )
+        return User.objects.annotate(is_subscribed=Value(False))
 
     def get_serializer_class(self):
         if self.request.method.lower() == 'post':
@@ -185,7 +185,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
     filter_backends = (rest_framework.DjangoFilterBackend,)
     filterset_class = RecipeFilter
-    queryset = Recipe.objects.all()
+    queryset = Recipe.recipes_related.all()
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -193,14 +193,16 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return RecipeWriteSerializer
 
     def get_queryset(self):
+        result = self.queryset
         tags = self.request.query_params.getlist('tags')
-        if not tags:
-            return Response(
-                {'warning': 'Не указаны тэги.'},
-                status=status.HTTP_204_NO_CONTENT
-            )
+        if tags:
+            result = result.filter(
+                tags__slug__in=tags
+            ).distinct()
+        else:
+            return Recipe.objects.none()
         if self.request.user.is_authenticated:
-            return Recipe.recipes_related.annotate(
+            return result.annotate(
                 is_in_shopping_cart=Exists(ShoppingCart.objects.filter(
                     user=self.request.user,
                     recipe=OuterRef('id'))
@@ -209,7 +211,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
                     user=self.request.user, recipe=OuterRef('id'))
                 )
             )
-        return Recipe.recipes_related.annotate(
+        return result.annotate(
             is_in_shopping_cart=Value(False),
             is_favorited=Value(False)
         )
