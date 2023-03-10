@@ -185,7 +185,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
     filter_backends = (rest_framework.DjangoFilterBackend,)
     filterset_class = RecipeFilter
-    queryset = Recipe.objects.all()
+    queryset = Recipe.recipes_related.all()
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -193,9 +193,14 @@ class RecipesViewSet(viewsets.ModelViewSet):
         return RecipeWriteSerializer
 
     def get_queryset(self):
+        queryset = self.queryset
         tags = self.request.query_params.getlist('tags')
+        if tags:
+            queryset.filter(
+                tags__slug__in=tags
+            ).distinct()
         if self.request.user.is_authenticated:
-            return Recipe.recipes_related.annotate(
+            return queryset.annotate(
                 is_in_shopping_cart=Exists(ShoppingCart.objects.filter(
                     user=self.request.user,
                     recipe=OuterRef('id'))
@@ -203,15 +208,11 @@ class RecipesViewSet(viewsets.ModelViewSet):
                 is_favorited=Exists(FavoriteRecipe.objects.filter(
                     user=self.request.user, recipe=OuterRef('id'))
                 )
-            ).filter(
-                tags__slug__in=tags
-            ).distinct()
-        return Recipe.recipes_related.annotate(
+            )
+        return queryset.annotate(
             is_in_shopping_cart=Value(False),
             is_favorited=Value(False)
-        ).filter(
-            tags__slug__in=tags
-        ).distinct()
+        )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
