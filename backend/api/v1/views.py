@@ -145,6 +145,8 @@ class AuthToken(ObtainAuthToken):
 class UsersViewSet(UserViewSet):
     """Вьюсет для работы с моделью пользователя."""
 
+    permission_classes = (AllowAny,)
+
     def get_queryset(self):
         if self.request.user.is_authenticated:
             return User.objects.annotate(
@@ -181,6 +183,7 @@ class UsersViewSet(UserViewSet):
 class RecipesViewSet(viewsets.ModelViewSet):
     """Вьюсет для рецептов."""
 
+    permission_classes = (AllowAny,)
     filter_backends = (rest_framework.DjangoFilterBackend,)
     filterset_class = RecipeFilter
     queryset = Recipe.recipes_related.all()
