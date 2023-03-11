@@ -141,6 +141,26 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 6,
 }
 
+DJOSER = {
+    'PERMISSIONS': {
+        'set_password': ['djoser.permissions.CurrentUserOrAdmin'],
+        'user_create': ['rest_framework.permissions.AllowAny'],
+        'user': ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
+        'token_create': ['rest_framework.permissions.AllowAny'],
+        'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
+        'user_list': ['rest_framework.permissions.AllowAny'],
+
+
+    },
+    'SERIALIZERS': {
+        'set_password': 'djoser.serializers.SetPasswordSerializer',
+        'user_create': 'djoser.serializers.UserCreateSerializer',
+        'token': 'djoser.serializers.TokenSerializer',
+        'token_create': 'djoser.serializers.TokenCreateSerializer',
+    },
+    'HIDE_USERS': False
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 

@@ -221,7 +221,8 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     def validate_cooking_time(self, cooking_time):
         if int(cooking_time) < 1:
             raise serializers.ValidationError(
-                'Время приготовления должно быть больше 1 минуты.'
+                detail={'cooking_time':
+                        'Время приготовления должно быть больше 1 минуты.'}
             )
         return cooking_time
 
@@ -233,7 +234,8 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         for ingredient in ingredients:
             if int(ingredient.get('amount')) < 1:
                 raise serializers.ValidationError(
-                    'Количество ингредиента должно быть больше 1.'
+                    detail={'ingredients':
+                            'Количество ингредиента должно быть больше 1.'}
                 )
         ingredient_list = []
         for items in ingredients:
