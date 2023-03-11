@@ -424,30 +424,5 @@
             "author": 2,
             "created": "2023-03-10T16:23:39.859Z"
         }
-    },
-    {
-        "model": "recipes.favoriterecipe",
-        "pk": 1,
-        "fields": {
-            "user": 5,
-            "recipe": [
-                7,
-                5,
-                4,
-                3,
-                2,
-                1
-            ]
-        }
-    },
-    {
-        "model": "recipes.shoppingcart",
-        "pk": 1,
-        "fields": {
-            "user": 5,
-            "recipe": [
-                7
-            ]
-        }
     }
 ]
