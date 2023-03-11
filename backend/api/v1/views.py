@@ -145,8 +145,6 @@ class AuthToken(ObtainAuthToken):
 class UsersViewSet(UserViewSet):
     """Вьюсет для работы с моделью пользователя."""
 
-    permission_classes = (IsAuthenticated,)
-
     def get_queryset(self):
         if self.request.user.is_authenticated:
             return User.objects.annotate(

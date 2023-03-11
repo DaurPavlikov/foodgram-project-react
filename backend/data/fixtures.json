@@ -54,6 +54,24 @@
         }
     },
     {
+        "model": "users.user",
+        "pk": 5,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$vHqXSXppuoEhYfpYuZjLZX$bz/cAm+zqnp9jeZay5fDSyquMe0OGd7Od6cL4x0AAyk=",
+            "last_login": null,
+            "is_superuser": true,
+            "username": "eldoson",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-03-10T16:21:27Z",
+            "email": "eldoson@yandex.ru",
+            "first_name": "Jhon",
+            "last_name": "Smith",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
         "model": "recipes.recipe",
         "pk": 1,
         "fields": {
@@ -155,6 +173,21 @@
             "pub_date": "2023-03-09T14:05:16.731Z",
             "tags": [
                 1
+            ]
+        }
+    },
+    {
+        "model": "recipes.recipe",
+        "pk": 11,
+        "fields": {
+            "author": 5,
+            "name": "Сырники из творога",
+            "image": "recipes/22a736da-0589-4ca3-9f6c-45db7ab775b6.webp",
+            "text": "Главный секрет идеальных сырников — а точнее творожников, — творог нужно протереть через мелкое сито и отжать от влаги. Жирность предпочтительна не больше и не меньше 9%. Тесто должно получиться эластичным, чтобы при надавливании сырник не треснул на сковородке, а сохранил форму. Если все сделать правильно, получатся нежные однородные кругляшки под плотной румяной корочкой. Сырники можно запекать в духовке или готовить на пару. В рецепте не исключаются эксперименты с начинкой — сухофрукты, орехи, свежие фрукты и даже картофель лишними не будут. Приятного аппетита!",
+            "cooking_time": 30,
+            "pub_date": "2023-03-10T16:44:15.777Z",
+            "tags": [
+                3
             ]
         }
     },
@@ -327,6 +360,76 @@
             "recipe": 7,
             "ingredient": 79,
             "amount": 10
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 45,
+        "fields": {
+            "recipe": 11,
+            "ingredient": 1806,
+            "amount": 350
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 46,
+        "fields": {
+            "recipe": 11,
+            "ingredient": 2182,
+            "amount": 2
+        }
+    },
+    {
+        "model": "recipes.recipeingredient",
+        "pk": 47,
+        "fields": {
+            "recipe": 11,
+            "ingredient": 1081,
+            "amount": 100
+        }
+    },
+    {
+        "model": "recipes.subscribe",
+        "pk": 9,
+        "fields": {
+            "user": 5,
+            "author": 1,
+            "created": "2023-03-10T16:22:57.904Z"
+        }
+    },
+    {
+        "model": "recipes.subscribe",
+        "pk": 10,
+        "fields": {
+            "user": 5,
+            "author": 2,
+            "created": "2023-03-10T16:23:39.859Z"
+        }
+    },
+    {
+        "model": "recipes.favoriterecipe",
+        "pk": 5,
+        "fields": {
+            "user": 5,
+            "recipe": [
+                7,
+                5,
+                4,
+                3,
+                2,
+                1
+            ]
+        }
+    },
+    {
+        "model": "recipes.shoppingcart",
+        "pk": 5,
+        "fields": {
+            "user": 5,
+            "recipe": [
+                7
+            ]
         }
     }
 ]
