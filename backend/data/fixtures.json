@@ -55,6 +55,24 @@
     },
     {
         "model": "users.user",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$OimWTiTCgrXL0wvX1hNLcD$qg+P1htuS7QcDHqjJ8HQttx3Rbx2v6Q9mk2WwcEjGFU=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "oreo",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-03-10T09:59:44.675Z",
+            "email": "oreo@oreo.ru",
+            "first_name": "Орео",
+            "last_name": "Печенька",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
         "pk": 5,
         "fields": {
             "password": "pbkdf2_sha256$260000$vHqXSXppuoEhYfpYuZjLZX$bz/cAm+zqnp9jeZay5fDSyquMe0OGd7Od6cL4x0AAyk=",
