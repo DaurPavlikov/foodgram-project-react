@@ -409,7 +409,7 @@
     },
     {
         "model": "recipes.favoriterecipe",
-        "pk": 5,
+        "pk": 1,
         "fields": {
             "user": 5,
             "recipe": [
@@ -424,7 +424,7 @@
     },
     {
         "model": "recipes.shoppingcart",
-        "pk": 5,
+        "pk": 1,
         "fields": {
             "user": 5,
             "recipe": [
