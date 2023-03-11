@@ -3,8 +3,9 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
 from drf_base64.fields import Base64ImageField
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.validators import UniqueValidator
+from rest_framework.response import Response
 
 from recipes.models import (
     Ingredient,
@@ -40,9 +41,10 @@ class TokenSerializer(serializers.Serializer):
                 email=email,
                 password=password)
             if not user:
-                raise serializers.ValidationError(
-                    AUTH_ERROR,
-                    code='authorization')
+                return Response(
+                    data={'errors': AUTH_ERROR},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
         else:
             msg = 'Необходимо указать "адрес электронной почты" и "пароль".'
             raise serializers.ValidationError(
@@ -221,8 +223,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     def validate_cooking_time(self, cooking_time):
         if int(cooking_time) < 1:
             raise serializers.ValidationError(
-                detail={'cooking_time':
-                        'Время приготовления должно быть больше 1 минуты.'}
+                'Время приготовления должно быть больше 1 минуты.'
             )
         return cooking_time
 
@@ -234,8 +235,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         for ingredient in ingredients:
             if int(ingredient.get('amount')) < 1:
                 raise serializers.ValidationError(
-                    detail={'ingredients':
-                            'Количество ингредиента должно быть больше 1.'}
+                    'Количество ингредиента должно быть больше 1.'
                 )
         ingredient_list = []
         for items in ingredients:
