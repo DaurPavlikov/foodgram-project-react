@@ -3,9 +3,8 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
 from drf_base64.fields import Base64ImageField
-from rest_framework import serializers, status
+from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from rest_framework.response import Response
 
 from recipes.models import (
     Ingredient,
@@ -41,15 +40,16 @@ class TokenSerializer(serializers.Serializer):
                 email=email,
                 password=password)
             if not user:
-                return Response(
-                    data={'errors': AUTH_ERROR},
-                    status=status.HTTP_400_BAD_REQUEST
+                raise serializers.ValidationError(
+                    AUTH_ERROR,
+                    code='authorization',
                 )
         else:
             msg = 'Необходимо указать "адрес электронной почты" и "пароль".'
             raise serializers.ValidationError(
                 msg,
-                code='authorization')
+                code='authorization',
+            )
         attrs['user'] = user
         return attrs
 
