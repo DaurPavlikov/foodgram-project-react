@@ -65,7 +65,7 @@ class TagAdmin(admin.ModelAdmin):
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'measurement_unit',)
     search_fields = ('name', 'measurement_unit',)
-    list_display_links = ('name',)
+    list_filter = ('name',)
     empty_value_display = EMPTY_DISPLAY
 
 
