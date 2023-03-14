@@ -14,6 +14,7 @@ EMPTY_DISPLAY = '-пусто-'
 
 
 class RecipeIngredientAdmin(admin.StackedInline):
+    extra = 1
     model = RecipeIngredient
     autocomplete_fields = ('ingredient',)
 
@@ -56,11 +57,11 @@ class RecipeAdmin(admin.ModelAdmin):
     @admin.display(description=' Ингредиенты ')
     def get_ingredients(self, obj):
         return '\n '.join([
-            f'{item["ingredient__name"]} - {item["amount"]}'
-            f' {item["ingredient__measurement_unit"]}.'
+            f'{item["many_ingredients__name"]} - {item["amount"]}'
+            f' {item["many_ingredients__measurement_unit"]}.'
             for item in obj.recipe.values(
-                'ingredient__name',
-                'amount', 'ingredient__measurement_unit')])
+                'many_ingredients__name',
+                'amount', 'many_ingredients__measurement_unit')])
 
     @admin.display(description='В избранном')
     def get_favorite_count(self, obj):
