@@ -39,7 +39,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'pub_date',
         'get_favorite_count',
     )
-    fields = ('image_tag')
+    fields = ['image_tag']
     list_display_links = ('name', 'text', 'image_tag', 'pub_date',)
     search_fields = (
         'name',
