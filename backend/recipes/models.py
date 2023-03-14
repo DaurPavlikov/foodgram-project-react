@@ -64,13 +64,6 @@ class Recipe(models.Model):
         blank=True,
         null=True
     )
-
-    def image_tag(self):
-        return mark_safe(
-            '<img src="/directory/%s" width="150" height="150" />'
-            % (self.image)
-        )
-    image_tag.short_description = 'Image'
     text = models.TextField('Описание рецепта')
     ingredients = models.ManyToManyField(
         Ingredient,
@@ -97,6 +90,13 @@ class Recipe(models.Model):
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
         ordering = ('-pub_date', )
+
+    def image_tag(self):
+        return mark_safe(
+            '<img src="/directory/%s" width="150" height="150" />'
+            % (self.image)
+        )
+    image_tag.short_description = 'Image'
 
     def __str__(self):
         return f'{self.author.email}, {self.name}'
