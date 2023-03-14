@@ -14,9 +14,9 @@ EMPTY_DISPLAY = '-пусто-'
 
 
 class RecipeIngredientAdmin(admin.StackedInline):
+    extrea = 1
     model = RecipeIngredient
     autocomplete_fields = ('ingredient',)
-    extrea = 1
 
 
 @admin.register(Recipe)
@@ -40,8 +40,8 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     fields = ('image',)
     readonly_fields = ('image',)
-    filter_horizontal = ('name', 'tags')
-    # list_filter = ('pub_date', 'name', 'author', 'tags',)
+    filter_horizontal = ('ingredients', 'tags')
+    list_filter = ('pub_date', 'name', 'author', 'tags',)
     inlines = (RecipeIngredientAdmin,)
     empty_value_display = EMPTY_DISPLAY
 
