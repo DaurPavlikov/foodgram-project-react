@@ -40,7 +40,6 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     fields = ('image',)
     readonly_fields = ('image',)
-    filter_horizontal = ('ingredients', 'tags')
     list_filter = ('pub_date', 'name', 'author', 'tags',)
     inlines = (RecipeIngredientAdmin,)
     empty_value_display = EMPTY_DISPLAY
