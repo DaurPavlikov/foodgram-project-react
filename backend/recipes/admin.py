@@ -10,7 +10,6 @@ from .models import (
     Tag
 )
 
-IMAGE_PATH = '<img src="{}" width="150" height="150" />'
 EMPTY_DISPLAY = '-пусто-'
 
 
