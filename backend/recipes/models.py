@@ -84,7 +84,7 @@ class Recipe(models.Model):
     )
 
     def image_tag(self):
-        path = '<img src="{}" width="150" height="150" />'
+        path = '<img src="/media/recipes/%s" width="150" height="150" />'
         return mark_safe(path % (self.image))
 
     image_tag.short_description = 'Image'
