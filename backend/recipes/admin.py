@@ -16,6 +16,7 @@ EMPTY_DISPLAY = '-пусто-'
 class RecipeIngredientAdmin(admin.StackedInline):
     model = RecipeIngredient
     autocomplete_fields = ('ingredient',)
+    extrea = 1
 
 
 @admin.register(Recipe)
@@ -30,12 +31,14 @@ class RecipeAdmin(admin.ModelAdmin):
         'pub_date',
         'get_favorite_count',
     )
+    list_display_links = ('name', 'text', 'pub_date',)
     search_fields = (
         'name',
         'cooking_time',
         'author__email',
-        'ingredients__name'
+        'ingredients__name',
     )
+    filter_horizontal = ('ingredients__name', 'get_tags',)
     list_filter = ('pub_date', 'name', 'author', 'tags',)
     inlines = (RecipeIngredientAdmin,)
     empty_value_display = EMPTY_DISPLAY

@@ -4,42 +4,25 @@ from django.db.models.aggregates import Count, Sum
 from django.db.models.expressions import Exists, OuterRef, Value
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
-from djoser.views import UserViewSet
 from django_filters import rest_framework
+from djoser.views import UserViewSet
 from rest_framework import generics, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.decorators import action, api_view
-from rest_framework.permissions import (
-    SAFE_METHODS,
-    AllowAny,
-    IsAuthenticated,
-)
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.permissions import SAFE_METHODS, AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from recipes.models import (
-    FavoriteRecipe,
-    Ingredient,
-    Recipe,
-    ShoppingCart,
-    Subscribe,
-    Tag,
-)
+from recipes.models import (FavoriteRecipe, Ingredient, Recipe, ShoppingCart,
+                            Subscribe, Tag)
 
 from .filters import IngredientsFilter, RecipeFilter
 from .mixins import GetObjectMixin
-from .serializers import (
-    IngredientSerializer,
-    RecipeReadSerializer,
-    RecipeWriteSerializer,
-    SubscribeSerializer,
-    TagSerializer,
-    TokenSerializer,
-    UserCreateSerializer,
-    UserListSerializer,
-    UserPasswordSerializer,
-)
+from .serializers import (IngredientSerializer, RecipeReadSerializer,
+                          RecipeWriteSerializer, SubscribeSerializer,
+                          TagSerializer, TokenSerializer, UserCreateSerializer,
+                          UserListSerializer, UserPasswordSerializer)
 from .utils import pdf_create
 
 FILENAME = 'shoppingcart.pdf'

@@ -5,6 +5,8 @@ const Footer = () => {
   return <footer className={styles.footer}>
       <Container className={styles.footer__container}>
         <LinkComponent href='#' title='Продуктовый помощник' className={styles.footer__brand} />
+        <LinkComponent href='#' title='Технологии' className={styles.footer__brand} />
+        <LinkComponent href='#' title='Об авторе' className={styles.footer__brand} />
       </Container>
   </footer>
 }
