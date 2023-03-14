@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils.html import mark_safe
 
 from .managers import RecipesRelatedManager
 
@@ -63,6 +64,13 @@ class Recipe(models.Model):
         blank=True,
         null=True
     )
+
+    def image_tag(self):
+        return mark_safe(
+            '<img src="/directory/%s" width="150" height="150" />'
+            % (self.image)
+        )
+    image_tag.short_description = 'Image'
     text = models.TextField('Описание рецепта')
     ingredients = models.ManyToManyField(
         Ingredient,

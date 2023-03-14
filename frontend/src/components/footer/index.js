@@ -6,12 +6,6 @@ const Footer = () => {
       <Container className={styles.footer__container}>
         <LinkComponent href='#' title='Продуктовый помощник' className={styles.footer__brand} />
       </Container>
-      <Container className={styles.footer__container}>
-        <LinkComponent href='#' title='Технологии' className={styles.footer__brand} />
-      </Container>
-      <Container className={styles.footer__container}>
-        <LinkComponent href='#' title='Об авторе' className={styles.footer__brand} />
-      </Container>
   </footer>
 }
 
