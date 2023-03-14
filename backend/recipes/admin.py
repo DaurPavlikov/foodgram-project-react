@@ -28,7 +28,6 @@ class RecipeAdmin(admin.ModelAdmin):
         'text',
         'cooking_time',
         'get_tags',
-        'get_ingredients',
         'pub_date',
         'get_favorite_count',
     )
@@ -53,15 +52,6 @@ class RecipeAdmin(admin.ModelAdmin):
     def get_tags(self, obj):
         list_ = [_.name for _ in obj.tags.all()]
         return ', '.join(list_)
-
-    @admin.display(description=' Ингредиенты ')
-    def get_ingredients(self, obj):
-        return '\n '.join([
-            f'{item["many_ingredients__name"]} - {item["amount"]}'
-            f' {item["many_ingredients__measurement_unit"]}.'
-            for item in obj.recipe.values(
-                'many_ingredients__name',
-                'amount', 'many_ingredients__measurement_unit')])
 
     @admin.display(description='В избранном')
     def get_favorite_count(self, obj):
