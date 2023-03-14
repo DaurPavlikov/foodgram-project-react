@@ -11,7 +11,7 @@ from .models import (
     Tag
 )
 
-IMAGE_PATH = '<img src="/recipes/%s" width="150" height="150" />'
+IMAGE_PATH = '<img src="{}" width="150" height="150" />'
 EMPTY_DISPLAY = '-пусто-'
 
 
@@ -39,7 +39,8 @@ class RecipeAdmin(admin.ModelAdmin):
         'pub_date',
         'get_favorite_count',
     )
-    list_display_links = ('name', 'text', 'pub_date',)
+    fields = ('image_tag')
+    list_display_links = ('name', 'text', 'image_tag', 'pub_date',)
     search_fields = (
         'name',
         'cooking_time',
