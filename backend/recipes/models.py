@@ -4,7 +4,6 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
-from django.utils.html import mark_safe
 
 from .managers import RecipesRelatedManager
 
@@ -90,13 +89,6 @@ class Recipe(models.Model):
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
         ordering = ('-pub_date', )
-
-    def image_tag(self):
-        return mark_safe(
-            '<img src="/directory/%s" width="150" height="150" />'
-            % (self.image)
-        )
-    image_tag.short_description = 'Image'
 
     def __str__(self):
         return f'{self.author.email}, {self.name}'

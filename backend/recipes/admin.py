@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from .models import (
     FavoriteRecipe,
@@ -10,6 +11,7 @@ from .models import (
     Tag
 )
 
+IMAGE_PATH = '<img src="/recipes/%s" width="150" height="150" />'
 EMPTY_DISPLAY = '-пусто-'
 
 
@@ -21,10 +23,16 @@ class RecipeIngredientAdmin(admin.StackedInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
+
+    def image_tag(self, obj):
+        return format_html(IMAGE_PATH.format(obj.image.url))
+
+    image_tag.short_description = 'Image'
     list_display = (
         'id',
         'get_author',
         'name',
+        'image_tag',
         'text',
         'cooking_time',
         'get_tags',
@@ -40,8 +48,6 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     list_filter = ('pub_date', 'name', 'author', 'tags',)
     inlines = (RecipeIngredientAdmin,)
-    # fields = ('image_tag',)
-    # readonly_fields = ('image_tag',)
     empty_value_display = EMPTY_DISPLAY
 
     @admin.display(description='Электронная почта автора')
