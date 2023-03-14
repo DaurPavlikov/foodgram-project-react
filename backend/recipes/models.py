@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils.html import mark_safe
 
 from .managers import RecipesRelatedManager
 
@@ -57,12 +58,6 @@ class Recipe(models.Model):
         verbose_name='Автор'
     )
     name = models.CharField('Название рецепта', max_length=255)
-    image = models.ImageField(
-        'Фото рецепта',
-        upload_to='recipes/',
-        blank=True,
-        null=True
-    )
     text = models.TextField('Описание рецепта')
     ingredients = models.ManyToManyField(
         Ingredient,
@@ -81,6 +76,18 @@ class Recipe(models.Model):
             message=f'Мин. время приготовления {MIN_COOKING_TIME} минута',
         ), ]
     )
+    image = models.ImageField(
+        'Фото рецепта',
+        upload_to='recipes/',
+        blank=True,
+        null=True
+    )
+
+    def image_tag(self):
+        path = '<img src="/recipes/%s" width="150" height="150" />'
+        return mark_safe(path % (self.image))
+
+    image_tag.short_description = 'Image'
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
     objects = models.Manager()
     recipes_related = RecipesRelatedManager()

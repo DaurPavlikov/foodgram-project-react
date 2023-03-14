@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils.html import format_html
 
 from .models import (
     FavoriteRecipe,
@@ -23,11 +22,8 @@ class RecipeIngredientAdmin(admin.StackedInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-
-    def image_tag(self, obj):
-        return format_html(IMAGE_PATH.format(obj.image.url))
-
-    image_tag.short_description = 'Image'
+    fields = ['image_tag']
+    readonly_fields = ['image_tag']
     list_display = (
         'id',
         'get_author',
@@ -39,8 +35,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'pub_date',
         'get_favorite_count',
     )
-    fields = ['image_tag']
-    list_display_links = ('name', 'text', 'image_tag', 'pub_date',)
+    list_display_links = ('id', 'name', 'text', 'image_tag', 'pub_date',)
     search_fields = (
         'name',
         'cooking_time',
