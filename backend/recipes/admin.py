@@ -22,7 +22,6 @@ class RecipeIngredientAdmin(admin.StackedInline):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     fields = ['image_tag']
-    readonly_fields = ['image_tag']
     list_display = (
         'id',
         'get_author',
